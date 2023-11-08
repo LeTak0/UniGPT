@@ -1,17 +1,13 @@
 import bcrypt from 'bcrypt';
 import fs from 'fs';
 import { parse, stringify } from 'csv/sync';
-import { error } from '@sveltejs/kit';
 
-console.log('Register endpoint loaded');
 
 const usersCsvPath = 'data/users.csv';
 
 /** @type {import('./$types').RequestHandler} */
 export async function POST({ request }) {
 	let { username, password } = await request.json();
-
-	console.log(username,password);
 
     // Hash the password
     const salt = await bcrypt.genSalt(10);
