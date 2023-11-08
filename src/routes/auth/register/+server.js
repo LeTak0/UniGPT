@@ -1,13 +1,17 @@
 import bcrypt from 'bcrypt';
 import fs from 'fs';
 import { parse, stringify } from 'csv/sync';
+import { error } from '@sveltejs/kit';
 
 console.log('Register endpoint loaded');
 
 const usersCsvPath = 'data/users.csv';
 
-export async function post(request) {
-    const { username, password } = request.body;
+/** @type {import('./$types').RequestHandler} */
+export async function POST({ request }) {
+	let { username, password } = await request.json();
+
+	console.log(username,password);
 
     // Hash the password
     const salt = await bcrypt.genSalt(10);
@@ -22,7 +26,7 @@ export async function post(request) {
 
     // Check if user already exists
     if (users.some(user => user.username === username)) {
-        return { status: 409, body: { error: 'User already exists' } };
+		throw error(409, 'User already exists')
     }
 
     // Add new user
@@ -31,7 +35,7 @@ export async function post(request) {
     fs.writeFileSync(usersCsvPath, updatedCsv);
 
     // Respond with success
-    return { status: 200, body: { success: 'User registered' } };
+    return new Response(JSON.stringify({ success: true }));
 }
 
 
