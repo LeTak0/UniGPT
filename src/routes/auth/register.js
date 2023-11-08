@@ -33,3 +33,5 @@ export async function post(request) {
     // Respond with success
     return { status: 200, body: { success: 'User registered' } };
 }
+
+
