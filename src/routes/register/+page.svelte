@@ -21,6 +21,14 @@
         console.error('Registration error:', result.error);
         // Display error message to the user
       }
+
+      try {
+      const response = await fetch('/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+
     } catch (error) {
       console.error('Network or other error:', error);
       // Handle network errors or other exceptions
