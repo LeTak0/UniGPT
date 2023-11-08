@@ -18,27 +18,19 @@
 			const result = await response.json();
 			console.log('Response received:', result); // Debugging line
 
-      if (response.ok) {
-        // Registration was successful, redirect to the login page
-        goto('/login');
-      } else {
-        // Handle errors, show message to the user
-        console.error('Registration error:', result.error);
-        // Display error message to the user
-      }
-
-      try {
-      const response = await fetch('/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
-      });
-
-    } catch (error) {
-      console.error('Network or other error:', error);
-      // Handle network errors or other exceptions
-    }
-  }
+			if (response.ok) {
+				// Registration was successful, redirect to the login page
+				goto('/login');
+			} else {
+				// Handle errors, show message to the user
+				console.error('Registration error:', result.error);
+				// Display error message to the user
+			}
+		} catch (error) {
+			console.error('Network or other error:', error);
+			// Handle network errors or other exceptions
+		}
+	}
 </script>
 
 <form on:submit={register}>
