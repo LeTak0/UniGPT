@@ -1,0 +1,10 @@
+:root {
+	--bs-border-radius: 1rem;
+}
+
+input {
+	border-radius: var(--bs-border-radius);
+	border: solid 1px var(--bs-gray-300);
+	/*remove shadow */
+	box-shadow: none;
+}

@@ -33,8 +33,18 @@
 	}
 </script>
 
-<form on:submit={register}>
-	<input type="text" bind:value={username} placeholder="Username" required />
-	<input type="password" bind:value={password} placeholder="Password" required />
-	<button type="submit">Register</button>
-</form>
+<div class="p-4 bg-light rounded border">
+	<h1 class="mb-4">Register</h1>
+	<form on:submit|preventDefault={register}>
+		<div class="mb-3">
+			<label for="username form-label">Username:</label>
+			<input id="username form-control" type="text" bind:value={username} required />
+		</div>
+		<div class="mb-3">
+			<label for="password form-label">Password:</label>
+			<input id="password form-control" type="password" bind:value={password} required />
+		</div>
+
+		<input class="btn btn-primary" type="submit" value="Login" />
+	</form>
+</div>
