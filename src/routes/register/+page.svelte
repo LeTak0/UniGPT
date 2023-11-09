@@ -45,6 +45,6 @@
 			<input id="password form-control" type="password" bind:value={password} required />
 		</div>
 
-		<input class="btn btn-primary" type="submit" value="Login" />
+		<input class="btn btn-primary" type="submit" value="Register" />
 	</form>
 </div>
