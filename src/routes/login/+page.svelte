@@ -14,7 +14,7 @@
 
 		if (response.ok) {
 			// Redirect to the user dashboard or home page after successful login
-			goto('https://chat.openai.com');
+			goto('chat');
 		} else {
 			// Handle errors, e.g., show an error message
 			console.error('Login failed');
