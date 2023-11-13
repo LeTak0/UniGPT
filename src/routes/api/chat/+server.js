@@ -4,9 +4,15 @@ import { error } from '@sveltejs/kit';
 import config from "$lib/server/config.js";
 
 export async function POST({ request }) {
-	let { message } = await request.json();
+	let { message, chat } = await request.json();
 
-	console.log("User send message: " + message);
+	if(!message) {
+		throw error(400, "Missing message");
+	}
+
+	if(!chat) {
+		//throw error(400, "Missing chatname");
+	}
 
 	let requestBody = {
 		model: config.openAiModelName,

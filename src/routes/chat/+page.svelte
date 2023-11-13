@@ -1,8 +1,8 @@
 <script>
-
-
-
-	let messages = [{fromUser:false,message:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia voluptatibus aut nam deleniti aspernatur architecto facilis impedit enim porro sit, placeat perspiciatis rerum quas incidunt officiis tempore. Molestiae, optio laborum."}];
+	/**
+	 * @type {any[]}
+	 */
+	let messages = [];
 	let messageInput = "";
 
 	let requestRunning = false;
