@@ -1,8 +1,8 @@
 <script>
-	/**
-	 * @type {any[]}
-	 */
-	let messages = [];
+
+
+
+	let messages = [{fromUser:false,message:"I am your mathematical assistant. I can help you with math related questions. Try asking me something like 'What is 2+2?' or 'What is the square root of 16?'"}];
 	let messageInput = "";
 
 	let requestRunning = false;
