@@ -5,7 +5,7 @@
 		<p>Your gateway to AI-powered conversations.</p>
 	</div>
 
-	<a class="btn btn-primary m-4 shadow" href="starting">
+	<a class="btn btn-primary m-4 shadow" href="chat">
 		Get started 🚀
 	</a>
 </div>

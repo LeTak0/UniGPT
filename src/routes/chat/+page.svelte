@@ -8,9 +8,20 @@
 	/**
 	 * @param {{ preventDefault: () => void; }} e
 	 */
-	function onSend(e) {
+	async function onSend(e) {
 		e.preventDefault();
+
 		messages = [...messages, {fromUser:true, message:messageInput}];
+
+		let response = await fetch("/api/chat", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({message:messageInput}),
+		}).then((res) => res.json()).catch((err) => console.error(err));
+
+		messages = [...messages, {fromUser:false, message:response.message}];
 		messageInput = "";
 	}
 </script>
