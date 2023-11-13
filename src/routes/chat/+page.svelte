@@ -5,12 +5,16 @@
 	let messages = [{fromUser:false,message:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia voluptatibus aut nam deleniti aspernatur architecto facilis impedit enim porro sit, placeat perspiciatis rerum quas incidunt officiis tempore. Molestiae, optio laborum."}];
 	let messageInput = "";
 
+	let requestRunning = false;
+
 	/**
 	 * @param {{ preventDefault: () => void; }} e
 	 */
 	async function onSend(e) {
 		e.preventDefault();
 
+		if (requestRunning) return;
+		requestRunning = true;
 		messages = [...messages, {fromUser:true, message:messageInput}];
 
 		let response = await fetch("/api/chat", {
@@ -21,6 +25,7 @@
 			body: JSON.stringify({message:messageInput}),
 		}).then((res) => res.json()).catch((err) => console.error(err));
 
+		requestRunning = false;
 		messages = [...messages, {fromUser:false, message:response.message}];
 		messageInput = "";
 	}
@@ -35,6 +40,14 @@
 			{#each messages as message}
 				<p><b>{message.fromUser ? "You" : "Assistant"}:</b> {message.message}</p>
 			{/each}
+			{#if requestRunning}
+				<div class="d-flex flex-row align-items-center">
+					<div class="spinner-border m-2" role="status">
+						<span class="visually-hidden">Loading...</span>
+					</div>
+					<span>Assistant is thinking...</span>
+				</div>
+			{/if}
 		</div>
 		<form class="d-flex flex-row bg-light m-1 p-2 bg-body rounded-4" on:submit={onSend}>
 			<input class="flex-grow-1 bg-transparent border-0 px-2" type="text" placeholder="Send a message" bind:value={messageInput}>
