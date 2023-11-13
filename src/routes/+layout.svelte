@@ -2,13 +2,13 @@
 	import { onMount } from 'svelte';
 
 	onMount(async () => {
-		await import('bootstrap/dist/css/bootstrap.min.css')
-		window.bootstrap = await import('bootstrap/dist/js/bootstrap.esm.js')
-	})
+		await import('bootstrap/dist/css/bootstrap.min.css');
+		window.bootstrap = await import('bootstrap/dist/js/bootstrap.esm.js');
+	});
 </script>
 
 <div class="d-flex flex-column app">
-	<nav class="d-flex flex-row justify-content-between">
+	<nav class="d-flex flex-row justify-content-between bg-body">
 		<a href="/" class="navbar-brand brand px-4 py-3">
 			<img src="/Logo_Uni_Siegen.svg" alt="UniGPT Logo" />
 		</a>
@@ -29,5 +29,22 @@
 
 	.app {
 		height: 100dvh;
+
+		background: hsla(192, 81%, 84%, 1);
+
+		background: radial-gradient(circle, hsla(192, 81%, 84%, 1) 20%, hsla(247, 73%, 69%, 1) 100%);
+
+		background: -moz-radial-gradient(
+			circle,
+			hsla(192, 81%, 84%, 1) 20%,
+			hsla(247, 73%, 69%, 1) 100%
+		);
+
+		background: -webkit-radial-gradient(
+			circle,
+			hsla(192, 81%, 84%, 1) 20%,
+			hsla(247, 73%, 69%, 1) 100%
+		);
+
 	}
 </style>

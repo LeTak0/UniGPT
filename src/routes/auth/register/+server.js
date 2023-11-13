@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import fs from 'fs';
 import { parse, stringify } from 'csv/sync';
+import { error } from '@sveltejs/kit';
 
 
 const usersCsvPath = 'data/users.csv';
@@ -26,7 +27,7 @@ export async function POST({ request }) {
     }
 
     // Add new user
-    users.push({ username, password: hashedPassword });
+    users.push({ username, password: hashedPassword, salt });
     const updatedCsv = stringify(users, { header: true });
     fs.writeFileSync(usersCsvPath, updatedCsv);
 

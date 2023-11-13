@@ -6,7 +6,7 @@
 	let password = '';
 
 	async function login() {
-		const response = await fetch('/login', {
+		const response = await fetch('auth/login', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ username, password })
@@ -14,7 +14,7 @@
 
 		if (response.ok) {
 			// Redirect to the user dashboard or home page after successful login
-			goto('/');
+			goto('https://chat.openai.com');
 		} else {
 			// Handle errors, e.g., show an error message
 			console.error('Login failed');
