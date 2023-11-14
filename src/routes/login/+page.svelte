@@ -4,6 +4,7 @@
 
 	let username = '';
 	let password = '';
+	let showError = false;
 
 	async function login() {
 		const response = await fetch('/api/login', {
@@ -17,6 +18,7 @@
 			goto('chat');
 		} else {
 			// Handle errors, e.g., show an error message
+			showError = true;
 			console.error('Login failed');
 		}
 	}
@@ -35,5 +37,10 @@
 		</div>
 
 		<input class="btn btn-primary" type="submit" value="Login" />
+		{#if showError}
+  		<div class="alert alert-danger" role="alert">
+    		Username or Password is incorrect!
+  		</div>
+		{/if}
 	</form>
 </div>

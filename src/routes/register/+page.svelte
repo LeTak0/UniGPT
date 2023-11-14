@@ -2,6 +2,7 @@
 	import { goto } from '$app/navigation';
 	let username = '';
 	let password = '';
+	let showError = false;
 
 	async function register(event) {
 		// Prevent the default form submission
@@ -24,6 +25,7 @@
 			} else {
 				// Handle errors, show message to the user
 				console.error('Registration error:', result.error);
+				showError = true;
 				// Display error message to the user
 			}
 		} catch (error) {
@@ -46,5 +48,12 @@
 		</div>
 
 		<input class="btn btn-primary" type="submit" value="Register" />
+		{#if showError}
+  		<div class="alert alert-danger" role="alert">
+    		User already exists
+  		</div>
+		{/if}
 	</form>
 </div>
+
+
