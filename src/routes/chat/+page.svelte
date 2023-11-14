@@ -1,11 +1,11 @@
 <script>
 
-
-
 	let messages = [{fromUser:false,message:"I am your mathematical assistant. I can help you with math related questions. Try asking me something like 'What is 2+2?' or 'What is the square root of 16?'"}];
 	let messageInput = "";
 
 	let requestRunning = false;
+
+	let chat = "Chat"; // replace with random name
 
 	/**
 	 * @param {{ preventDefault: () => void; }} e
@@ -22,19 +22,41 @@
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({message:messageInput}),
+			body: JSON.stringify({ message: messageInput, chatTitle: chat }),
 		}).then((res) => res.json()).catch((err) => console.error(err));
 
 		requestRunning = false;
 		messages = [...messages, {fromUser:false, message:response.message}];
 		messageInput = "";
 	}
+
+	async function createNewChat() {
+		try {
+			let response = await fetch("/api/new-chat", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ chatTitle: chat }),
+			});
+			if (response.ok) {
+				messages = []; // Reset messages for the new chat
+			} else {
+				console.error("Failed to create a new chat");
+			}
+		} catch (err) {
+			console.error("Error while creating a new chat", err);
+		}
+	}
+
 </script>
 
 <div class="d-flex flex-row w-100 h-100 bg-light">
 	<div class="d-flex flex-column bg-body">
-		<input class="m-2" type="submit" value="Neuer Chat">
+		<input class="m-2" type="text" bind:value={chat} placeholder="Chat Title" />
+		<input class="m-2" type="submit" value="Neuer Chat" on:click={createNewChat}>
 	</div>
+
 	<div class="d-flex flex-column flex-grow-1 p-4">
 		<div class="flex-grow-1">
 			{#each messages as message}

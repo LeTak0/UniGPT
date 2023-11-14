@@ -1,8 +1,9 @@
 
 import { error } from '@sveltejs/kit';
-
+import fs from "fs";
 import config from "$lib/server/config.js";
 
+const chatDirectory = 'data/chat/';
 export async function POST({ request }) {
 	let { message, chat } = await request.json();
 
@@ -14,11 +15,25 @@ export async function POST({ request }) {
 		//throw error(400, "Missing chatname");
 	}
 
+	// Define the file path
+    const filePath = `${chatDirectory}/${chat}.json`;
+
+    // Initialize or read chat history
+    let history;
+    if (fs.existsSync(filePath)) {
+        history = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    } else {
+        history = [];
+    }
+
+	// Append new user message to history
+    history.push({ role: "user", content: message });
+
 	let requestBody = {
 		model: config.openAiModelName,
 		messages:[
 			{role:"system",content:"You are a math tutor. Be kind to your students and help them learn math."},
-			{role:"user",content:message}
+			...history
 		]
 	}
 
@@ -43,6 +58,12 @@ export async function POST({ request }) {
 	let completionText = completionResponse.choices[0].message.content;
 
 	console.log("AI response: " + completionText);
+
+	// Update history with AI response
+    history.push({ role: "assistant", content: completionText });
+
+    // Save updated history to the file
+    fs.writeFileSync(filePath, JSON.stringify(history));
 
 	return new Response(JSON.stringify({ success: true , message: completionText}));
 }
