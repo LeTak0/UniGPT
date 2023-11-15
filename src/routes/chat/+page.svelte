@@ -17,16 +17,50 @@
 		requestRunning = true;
 		messages = [...messages, {fromUser:true, message:messageInput}];
 
-		let response = await fetch("/api/chat", {
+		messages = [...messages, {fromUser:false, message:""}];
+
+		await fetch("/api/chat", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify({ message: messageInput, chatTitle: chat }),
-		}).then((res) => res.json()).catch((err) => console.error(err));
+		}).then((res) => {
+			if(!res.body) return;
+			const reader = res.body.getReader();
+
+			return new ReadableStream({
+				start(controller) {
+					pump();
+					
+					function pump() {
+						
+						reader.read().then(({ done, value }) => {
+							
+							if (done) {
+								controller.close();
+								return;
+							}
+
+							const chunk = value;
+							const decoder = new TextDecoder().decode(chunk);
+							const json = JSON.parse(decoder);
+
+							if(json.message) {
+								messages[messages.length-1].message += json.message;
+							}
+							console.log(json);
+
+							pump();
+						});
+					}
+
+				},
+			});
+
+		});
 
 		requestRunning = false;
-		messages = [...messages, {fromUser:false, message:response.message}];
 		messageInput = "";
 	}
 
