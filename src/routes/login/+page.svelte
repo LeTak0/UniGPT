@@ -1,46 +1,29 @@
 <script>
-	import { onMount } from 'svelte';
+	import { enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
 
-	let username = '';
-	let password = '';
-	let showError = false;
-
-	async function login() {
-		const response = await fetch('/api/login', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ username, password })
-		});
-
-		if (response.ok) {
-			// Redirect to the user dashboard or home page after successful login
-			goto('chat');
-		} else {
-			// Handle errors, e.g., show an error message
-			showError = true;
-			console.error('Login failed');
-		}
-	}
+	/** @type {import('./$types').ActionData} */
+	export let form;
 </script>
 
 <div class="p-4 bg-light rounded border">
 	<h1 class="mb-4">Login</h1>
-	<form on:submit|preventDefault={login}>
+	<form method="post" use:enhance>
 		<div class="mb-3">
 			<label for="username form-label">Username:</label>
-			<input id="username form-control" type="text" bind:value={username} required />
+			<input id="username form-control" type="text" required name="username" />
 		</div>
 		<div class="mb-3">
 			<label for="password form-label">Password:</label>
-			<input id="password form-control" type="password" bind:value={password} required />
+			<input id="password form-control" type="password" required name="password"/>
 		</div>
 
 		<input class="btn btn-primary" type="submit" value="Login" />
-		{#if showError}
-  		<div class="alert alert-danger" role="alert">
-    		Username or Password is incorrect!
-  		</div>
+		
+		{#if form?.message}
+			<div class="alert alert-danger mt-2 py-2" role="alert">
+				{form.message}
+			</div>
 		{/if}
 	</form>
 </div>

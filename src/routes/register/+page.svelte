@@ -7,7 +7,6 @@
 	async function register(event) {
 		// Prevent the default form submission
 		event.preventDefault();
-		console.log('Register function called'); // Debugging line
 
 		try {
 			const response = await fetch('/api/register', {

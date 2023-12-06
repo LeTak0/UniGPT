@@ -1,10 +1,21 @@
 <script>
+	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
+	import { base } from '$app/paths';
 
 	onMount(async () => {
 		await import('bootstrap/dist/css/bootstrap.min.css');
 		window.bootstrap = await import('bootstrap/dist/js/bootstrap.esm.js');
 	});
+
+	async function logout() {
+		await fetch(`${base}/api/logout`, { method: 'DELETE' }).then(() => {
+			goto(`${base}/`);
+		});
+	}
+
+	/** @type {import('./$types').LayoutData} */
+	export let data;
 </script>
 
 <div class="d-flex flex-column app">
@@ -13,8 +24,13 @@
 			<img src="/Logo_Uni_Siegen.svg" alt="UniGPT Logo" />
 		</a>
 		<div class="d-flex flex-row align-items-center p-4">
-			<a class="nav-link p-2" href="/register">Register</a>
-			<a class="nav-link p-2" href="/login">Login</a>
+			{#if !data.username}
+				<a class="nav-link p-2" href="{base}/register">Register</a>
+				<a class="nav-link p-2" href="{base}/login">Login</a>
+			{:else}
+				<a class="nav-link p-2 mx-4 link link-underline-primary" href="{base}/chat">Chats</a>
+				<button class="btn btn-outline-primary" type="submit" on:click={logout}>Logout</button>
+			{/if}
 		</div>
 	</nav>
 	<main class="d-flex align-items-center justify-content-center flex-grow-1">
