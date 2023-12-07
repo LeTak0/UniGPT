@@ -3,6 +3,9 @@ import config from "$lib/server/config.js";
 import OpenAI from 'openai';
 import { getChatHistory, updateChatHistory } from "./database";
 
+if(!config.openAiApiKey) throw new Error("OPENAI_API_KEY environment variable not set");
+if(!config.openAiModelName) throw new Error("OPENAI_MODEL_NAME environment variable not set");
+
 const openai = new OpenAI({
 	apiKey: config.openAiApiKey,
 });
