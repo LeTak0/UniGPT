@@ -28,7 +28,11 @@
 				<a class="nav-link p-2" href="{base}/register">Register</a>
 				<a class="nav-link p-2" href="{base}/login">Login</a>
 			{:else}
-				<a class="nav-link p-2 mx-4 link link-underline-primary" href="{base}/chat">Chats</a>
+				{#if data.role === 'admin'}
+					<a class="nav-link p-2 mx-4 link link-underline-primary" href="{base}/admin">Admin Panel</a>
+				{:else}
+					<a class="nav-link p-2 mx-4 link link-underline-primary" href="{base}/chat">Chat</a>
+				{/if}
 				<button class="btn btn-outline-primary" type="submit" on:click={logout}>Logout</button>
 			{/if}
 		</div>

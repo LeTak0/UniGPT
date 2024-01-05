@@ -31,6 +31,21 @@ async function getUser(username){
 	return user[0];
 }
 
+
+/**
+ * 
+ * @returns {Promise<{username:string,password:string,salt:string,role:string}[] | null>}
+ */
+export async function getUsers(){
+	let users = await userDB.get({});
+	return users.map((/** @type {{ username: any; role: any; }} */ user) => {
+		return {
+			username:user.username,
+			role:user.role
+		}
+	});
+}
+
 /**
  * @param {string} username
  * @param {string} passwordHash
