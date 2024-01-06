@@ -64,7 +64,7 @@
 							/></td
 						>
 						<td>{user.username}</td>
-						<td>{user.role}</td>
+						<td class="{user.role == "admin" ? "text-warning" : ""}">{user.role}</td>
 						<td
 							><input
 								type="button"

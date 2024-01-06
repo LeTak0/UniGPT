@@ -25,12 +25,25 @@ if (!fs.existsSync(chatsFolderPath)){
  * @param {string} username 
  * @returns {Promise<{username:string,password:string,salt:string,role:string} | null>}
  */
-async function getUser(username){
+async function getUserFull(username){
 	let user = await userDB.get({username:username});
 	if(user.length === 0) return null;
 	return user[0];
 }
 
+/**
+ * 
+ * @param {string} username 
+ * @returns {Promise<{username:string,role:string} | null>}
+ */
+export async function getUser(username){
+	let user = await userDB.get({username:username});
+	if(user.length === 0) return null;
+	return {
+		username:user[0].username,
+		role:user[0].role
+	}
+}
 
 /**
  * 
@@ -68,6 +81,34 @@ async function addUser(username,passwordHash,salt,role){
 
 	return true;
 }
+
+/**
+ * @param {string} oldUsername
+ * @param {string} newUsername
+ * @param {string} role
+ * @returns {Promise<void>}
+ */
+export async function updateUser(oldUsername,newUsername,role){
+	let edited = await userDB.edit({username:oldUsername},{username:newUsername,role:role});
+	if(edited.length === 0) return Promise.reject();
+	return;
+}
+
+
+/**
+ * @param {string[]} username
+ * @returns {Promise<boolean>}
+ */
+
+export async function deleteUsers(username){
+	let deleted = [];
+	for(let i = 0; i < username.length; i++){
+		deleted.push(await userDB.delete({username:username[i]}));
+	}
+	if(deleted.length === 0) return Promise.reject();
+	return true;
+}
+
 
 /**
  * @returns {string} sessionToken
@@ -130,7 +171,7 @@ export async function deleteSession(sessionToken){
 export async function loginUser(username,password){
 	
 	//check if user exists
-	let user = await getUser(username);
+	let user = await getUserFull(username);
 	if(!user) return Promise.reject();
 
 	//check if password is correct
@@ -150,7 +191,7 @@ export async function loginUser(username,password){
  * @returns {Promise<boolean>} success
  */
 export async function createUser(username,password){
-	let user = await getUser(username);
+	let user = await getUserFull(username);
 	if(user) return Promise.reject(new Error('User already exists'));
 
     // Hash the password

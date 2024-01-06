@@ -1,6 +1,9 @@
 <script>
-	import DeleteConfirm from "./DeleteConfirm.svelte";
-	import SetPassword from "./SetPassword.svelte";
+	import { enhance } from '$app/forms';
+	import { invalidate, invalidateAll } from '$app/navigation';
+	import { base } from '$app/paths';
+	import DeleteConfirm from './DeleteConfirm.svelte';
+	import SetPassword from './SetPassword.svelte';
 
 	/** @type {string | null} */
 	export let username;
@@ -9,9 +12,16 @@
 	let dialog;
 
 	$: if (dialog && username) {
+		//check if dialog is open
+		if (!dialog.open) {
+			fetch(`/api/users/${username}`)
+				.then((res) => res.json())
+				.then((data) => {
+					currentUsername = data.username;
+					currentRole = data.role;
+				});
+		}
 		dialog.showModal();
-		currentUsername = username;
-		currentRole = 'user';
 	}
 
 	function close() {
@@ -19,17 +29,30 @@
 		username = null;
 	}
 
-	function deleteConfirm(){
-		console.log('delete');
+	async function deleteConfirm() {
+		await fetch(`/api/users/${username}`, { method: 'DELETE' });
+		await invalidate("app:admin:users");
 		close();
 	}
 
-	let currentUsername = 'ben';
-	let currentRole = 'user';
+	async function save() {
+		let form = new URLSearchParams();
+		form.append('username', currentUsername);
+		form.append('role', currentRole);
+
+		await fetch(`/api/users/${username}`, {
+			method: 'PATCH',
+			body: form
+		});
+		await invalidate("app:admin:users");
+		close();
+	}
+
+	let currentUsername = '';
+	let currentRole = '';
 
 	let showDeleteConfirm = false;
 	let showPasswordReset = false;
-
 </script>
 
 <DeleteConfirm bind:showModal={showDeleteConfirm} on:delete={deleteConfirm} />
@@ -63,6 +86,8 @@
 					name="options"
 					id="roleOptionUser"
 					autocomplete="off"
+					value="user"
+					bind:group={currentRole}
 					checked
 				/>
 				<label class="btn btn-outline-primary form-control" for="roleOptionUser">User</label>
@@ -72,6 +97,8 @@
 					name="options"
 					id="roleOptionAdmin"
 					autocomplete="off"
+					value="admin"
+					bind:group={currentRole}
 				/>
 				<label
 					class="btn btn-outline-warning form-control justify-items-center pe-4"
@@ -81,12 +108,18 @@
 		</div>
 		<div class="btn-group mb-3">
 			<span class="input-group-text">Password</span>
-			<button type="button" class="btn btn-secondary me-2" on:click={() => showPasswordReset = true}>Reset</button>
+			<button
+				type="button"
+				class="btn btn-secondary me-2"
+				on:click={() => (showPasswordReset = true)}>Reset</button
+			>
 		</div>
 	</div>
 
 	<div class="modal-footer col">
-		<button type="button" class="btn btn-danger me-2" on:click={() => showDeleteConfirm = true}>Delete</button>
-		<button type="button" class="btn btn-primary">Save changes</button>
+		<button type="button" class="btn btn-danger me-2" on:click={() => (showDeleteConfirm = true)}
+			>Delete</button
+		>
+		<button type="button" class="btn btn-primary" on:click={save}>Save changes</button>
 	</div>
 </dialog>

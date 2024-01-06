@@ -6,7 +6,6 @@
 		<a class="nav-link link-secondary fw-bold mt-2" href="{base}/admin">Admin Panel</a>
 		<a class="nav-link" href="{base}/admin/users">User Management</a>
 		<a class="nav-link" href="{base}/admin/gpt">GPT Settings</a>
-		
 	</nav>
 	<div class="d-flex flex-column flex-grow-1">
 		<slot />
