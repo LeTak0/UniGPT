@@ -26,7 +26,7 @@ export async function sendMessageInChat(username,chatname,message){
 
 	const stream = openai.beta.chat.completions.stream({
 		messages: [
-			{ role: "system", content: "You are a math tutor. Be kind to your students and help them learn math." },
+			{ role: "system", content: "You are a math tutor. Be kind to your students and help them learn math. You must use Tex notation for Formulas. To write equations inline use \\(\\)" },
 			...history
 		],
 		model:config.openAiModelName,
@@ -44,6 +44,8 @@ export async function sendMessageInChat(username,chatname,message){
 				history.push({ role: "assistant", content: completion.content || "", name: "AI"});
 
 				updateChatHistory(username,chatname,history);
+
+				controller.close();
 			});
 		}
 	});

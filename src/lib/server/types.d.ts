@@ -14,3 +14,6 @@ declare namespace App {
 
     interface Platform {}
 }
+
+//MathJax
+declare var MathJax: any;

@@ -1,5 +1,7 @@
 <script>
 	import { enhance } from '$app/forms';
+	import { afterNavigate } from '$app/navigation';
+	import { onMount, tick } from 'svelte';
 
 	/** @type {import('./$types').PageData} */
 	export let data;
@@ -24,7 +26,7 @@
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify({ message: messageInput, chat:data.chatname })
+			body: JSON.stringify({ message: messageInput, chat: data.chatname })
 		}).then((res) => {
 			if (!res.body) return;
 			const reader = res.body.getReader();
@@ -37,6 +39,7 @@
 						reader.read().then(({ done, value }) => {
 							if (done) {
 								controller.close();
+								try { MathJax.typeset(); } catch (e) { }
 								return;
 							}
 
@@ -55,15 +58,44 @@
 		messageInput = '';
 	}
 
+	onMount(() => {
+		MathJax.tex = {
+			inlineMath: [['$', '$'], ['\\(', '\\)']],
+			processEscapes: true,
+		};
+		try { MathJax.typeset(); } catch (e) { }
+	});
+
+	afterNavigate(async () => {
+		await tick();
+		try { MathJax.typeset(); } catch (e) { }
+	});
 </script>
+
+<svelte:head>
+	<title>{data.chatname} - Chat</title>
+	<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+	<script
+		id="MathJax-script"
+		async
+		src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+	></script>
+</svelte:head>
+
 <form method="post" action="?/rename" class="input-group d-flex flex-row p-4" use:enhance>
-	<input class="border flex-grow-1 px-2 form-control" type="text" placeholder="Chat Title" bind:value={data.chatname} name="name"/>
-	<input class="btn btn-secondary" type="submit" value="Change">
+	<input
+		class="border flex-grow-1 px-2 form-control"
+		type="text"
+		placeholder="Chat Title"
+		bind:value={data.chatname}
+		name="name"
+	/>
+	<input class="btn btn-secondary" type="submit" value="Rename" />
 </form>
 <div class="d-flex flex-column flex-grow-1 p-4">
 	<div class="flex-grow-1">
 		{#if data.history}
-			{#each data.history as message}
+			{#each data.history as message (message)}
 				<p><b>{message.role == 'user' ? 'You' : 'Assistant'}:</b> {message.content}</p>
 			{/each}
 		{/if}
@@ -89,4 +121,3 @@
 		<input class="p-1 ms-2 rounded-3 btn btn-primary px-2 py-1" type="submit" value="Senden" />
 	</form>
 </div>
-
