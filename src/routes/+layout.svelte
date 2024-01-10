@@ -5,6 +5,7 @@
 
 	onMount(async () => {
 		await import('bootstrap/dist/css/bootstrap.min.css');
+		await import('bootstrap-icons/font/bootstrap-icons.css');
 		window.bootstrap = await import('bootstrap/dist/js/bootstrap.esm.js');
 	});
 
