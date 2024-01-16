@@ -8,3 +8,33 @@ input {
 	/*remove shadow */
 	box-shadow: none;
 }
+
+html,
+body {
+	height: 100dvh;
+	max-height: 100dvh;
+	overflow: hidden;
+}
+
+/* nicer scrollbars */
+/* ===== Scrollbar CSS ===== */
+/* Firefox */
+* {
+	scrollbar-width: auto;
+	scrollbar-color: #6e6e6e #ffffff;
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+	width: 0.5rem;
+}
+
+*::-webkit-scrollbar-track {
+	background: #ffffff;
+	border-radius: 0.5rem;
+}
+
+*::-webkit-scrollbar-thumb {
+	background-color: var(--bs-gray-500);
+	border-radius: 0.5rem;
+}

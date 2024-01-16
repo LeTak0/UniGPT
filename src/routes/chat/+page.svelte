@@ -4,9 +4,11 @@
 	import { enhance } from '$app/forms';
 	import { base } from '$app/paths';
 
+	//limit to 6 chats
+	$: displayedChats = data.chats.slice(0, 6);
 </script>
 
-<div class="previous">
+<div class="previous overflow-y-scroll">
 	<div class="p-4 border border-primary-subtle rounded bg-primary-subtle">
 		<h3>Start a new conversation!</h3>
 		<br>
@@ -19,7 +21,7 @@
 		<div class="banner pt-4">
 			<h3>Your previous conversations:</h3>
 		</div>
-		{#each data.chats as chat}
+		{#each displayedChats as chat}
 			<div class="p-4 border rounded bg-secondary-subtle">
 				<h5>{chat.name}</h5>
 				<br />	

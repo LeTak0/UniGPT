@@ -1,6 +1,7 @@
 <script>
 	import { enhance } from '$app/forms';
 	import { afterNavigate } from '$app/navigation';
+	import { typesetPage } from '$lib/MathJaxHook';
 	import { onMount, tick } from 'svelte';
 
 	/** @type {import('./$types').PageData} */
@@ -8,6 +9,9 @@
 
 	let messageInput = '';
 	let requestRunning = false;
+
+	/** @type {HTMLDivElement} */
+	let scrollContainer;
 
 	/**
 	 * @param {{ preventDefault: () => void; }} e
@@ -33,13 +37,15 @@
 
 			return new ReadableStream({
 				start(controller) {
+					scrollDown();
 					pump();
 
 					function pump() {
 						reader.read().then(({ done, value }) => {
 							if (done) {
 								controller.close();
-								try { MathJax.typeset(); } catch (e) { }
+								typesetPage();
+								scrollDown();
 								return;
 							}
 
@@ -58,17 +64,19 @@
 		messageInput = '';
 	}
 
-	onMount(() => {
-		MathJax.tex = {
-			inlineMath: [['$', '$'], ['\\(', '\\)']],
-			processEscapes: true,
-		};
-		try { MathJax.typeset(); } catch (e) { }
+	function scrollDown() {
+		scrollContainer.scrollTop = scrollContainer.scrollHeight;
+	}
+
+	onMount(async () => {
+		await typesetPage();
+		scrollDown();
 	});
 
 	afterNavigate(async () => {
 		await tick();
-		try { MathJax.typeset(); } catch (e) { }
+		await typesetPage();
+		scrollDown();
 	});
 </script>
 
@@ -82,18 +90,21 @@
 	></script>
 </svelte:head>
 
-<form method="post" action="?/rename" class="input-group d-flex flex-row p-4" use:enhance>
-	<input
-		class="border flex-grow-1 px-2 form-control"
-		type="text"
-		placeholder="Chat Title"
-		bind:value={data.chatname}
-		name="name"
-	/>
-	<input class="btn btn-secondary" type="submit" value="Rename" />
-</form>
-<div class="d-flex flex-column flex-grow-1 p-4">
-	<div class="flex-grow-1">
+<div class="chat p-4 h-100">
+	<form method="post" action="?/rename" class="input-group d-flex flex-row pb-4" use:enhance>
+		<input
+			class="border flex-grow-1 px-2 form-control"
+			type="text"
+			placeholder="Chat Title"
+			bind:value={data.chatname}
+			name="name"
+			max="64"
+			min="1"
+			pattern="^[a-zA-Z0-9_\-!?. ]+$"
+		/>
+		<input class="btn btn-secondary" type="submit" value="Rename" />
+	</form>
+	<div class="flex-grow-1 overflow-y-scroll" bind:this={scrollContainer}>
 		{#if data.history}
 			{#each data.history as message (message)}
 				<p><b>{message.role == 'user' ? 'You' : 'Assistant'}:</b> {message.content}</p>
@@ -111,7 +122,7 @@
 			</div>
 		{/if}
 	</div>
-	<form class="d-flex flex-row bg-light m-1 p-2 bg-body rounded-4" on:submit={onSend}>
+	<form class="d-flex flex-row bg-light m-2 mt-3 p-2 bg-body rounded-4" on:submit={onSend}>
 		<input
 			class="flex-grow-1 bg-transparent border-0 px-2"
 			type="text"
@@ -121,3 +132,10 @@
 		<input class="p-1 ms-2 rounded-3 btn btn-primary px-2 py-1" type="submit" value="Senden" />
 	</form>
 </div>
+
+<style>
+	.chat {
+		display: grid;
+		grid-template-rows: min-content 1fr min-content;
+	}
+</style>

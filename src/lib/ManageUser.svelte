@@ -36,8 +36,10 @@
 	}
 
 	async function save() {
+		if(!username) return;
 		let form = new URLSearchParams();
-		form.append('username', currentUsername);
+		form.append('username', username);
+		form.append('newUsername', currentUsername);
 		form.append('role', currentRole);
 
 		await fetch(`/api/users/${username}`, {
@@ -117,9 +119,9 @@
 	</div>
 
 	<div class="modal-footer col">
-		<button type="button" class="btn btn-danger me-2" on:click={() => (showDeleteConfirm = true)}
-			>Delete</button
-		>
+		<button type="button" class="btn btn-danger me-2" on:click={() => (showDeleteConfirm = true)}>
+			Delete
+		</button>
 		<button type="button" class="btn btn-primary" on:click={save}>Save changes</button>
 	</div>
 </dialog>

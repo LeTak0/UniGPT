@@ -39,7 +39,7 @@
 
 <div class="layout w-100 h-100 bg-light">
 	<DeleteConfirm showModal={deleteConfirmOpen} on:delete={deleteConfirm} />
-	<div class="d-flex flex-column bg-body">
+	<div class="d-flex flex-column bg-body w-100 h-100 overflow-hidden">
 		<a class="text-center text-black fw-bold text-decoration-none" href="/chat">Your Chats</a>
 		<form
 			class="w-100 d-flex justify-content-center"
@@ -49,7 +49,7 @@
 		>
 			<input class="m-2 w-auto btn btn-primary" type="submit" value="New Chat" />
 		</form>
-		<div class="chats">
+		<div class="chats overflow-y-scroll">
 			{#if data.chats}
 				{#each data.chats as chat}
 					<button
@@ -66,7 +66,7 @@
 		</div>
 	</div>
 
-	<div class="d-flex flex-column flex-grow-1">
+	<div class="d-flex flex-column flex-grow-1 overflow-y-hidden">
 		<slot />
 	</div>
 </div>

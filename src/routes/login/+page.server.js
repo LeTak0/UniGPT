@@ -1,6 +1,13 @@
 import { loginUser } from "$lib/server/database";
 import { validateRole } from "$lib/server/sessionHelper";
 import { fail, redirect } from '@sveltejs/kit';
+import { passwordShema, usernameShema } from '$lib/server/validationTypes';
+import Joi from 'joi';
+
+const loginShema = Joi.object({
+	username: usernameShema,
+	password: passwordShema
+});
 
 export const actions = {
 	default: async ({request, cookies}) => {
@@ -8,12 +15,11 @@ export const actions = {
 		const username = formData.get('username');
 		const password = formData.get('password');
 
-		if(!username || !password || typeof username !== 'string' || typeof password !== 'string'){
-			return fail(400, {message: 'Invalid username or password'});
-		}
+		let { error: err, value } = loginShema.validate({username,password});
+		if (err) return fail(400, {message:err.message});
 
 		//not very clean, but sveltekit expects a throw to redirect
-		let loggedIn = await loginUser(username,password)
+		let loggedIn = await loginUser(value.username,value.password)
 		.then((sessionToken) => { 
 			return {sucess:true,token:sessionToken.token,role:sessionToken.role}; 
 		}).catch((err) => {

@@ -1,5 +1,5 @@
 <script>
-	import { goto } from '$app/navigation';
+	import { goto, invalidate } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { base } from '$app/paths';
 
@@ -10,8 +10,9 @@
 	});
 
 	async function logout() {
-		await fetch(`${base}/api/logout`, { method: 'DELETE' }).then(() => {
-			goto(`${base}/`);
+		await fetch(`${base}/api/logout`, { method: 'DELETE' }).then(async () => {
+			await invalidate('app:session');
+			await goto(`${base}/`);
 		});
 	}
 
@@ -19,7 +20,14 @@
 	export let data;
 </script>
 
-<div class="d-flex flex-column app">
+<div class="app">
+	<!--<div class="position-absolute top-0 end-0 alert alert-primary d-flex align-items-center alert-dismissible m-3" role="alert">
+		<i class="bi bi-info-circle pe-2 "></i>
+		<div>
+			Succesfully logged out
+		</div>
+		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+	</div>-->
 	<nav class="d-flex flex-row justify-content-between bg-body">
 		<a href="/" class="navbar-brand brand px-4 py-3">
 			<img src="/Logo_Uni_Siegen.svg" alt="UniGPT Logo" />
@@ -38,7 +46,7 @@
 			{/if}
 		</div>
 	</nav>
-	<main class="d-flex align-items-center justify-content-center flex-grow-1">
+	<main class="d-flex align-items-center justify-content-center overflow-hidden">
 		<slot />
 	</main>
 </div>
@@ -50,6 +58,7 @@
 
 	.app {
 		height: 100dvh;
+		max-height: 100dvh;
 
 		background: hsla(192, 81%, 84%, 1);
 
@@ -67,5 +76,7 @@
 			hsla(247, 73%, 69%, 1) 100%
 		);
 
+		display: grid;
+		grid-template-rows: min-content 1fr;
 	}
 </style>
