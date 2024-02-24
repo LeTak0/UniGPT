@@ -84,8 +84,8 @@
 		await typesetPage();
 		scrollDown();
 
-		uploadSection.addEventListener('dragover', onDragEnter);
-		uploadSection.addEventListener('drop', onDragDrop);
+		//uploadSection.addEventListener('dragover', onDragEnter);
+		//uploadSection.addEventListener('drop', onDragDrop);
 	});
 
 	afterNavigate(async () => {

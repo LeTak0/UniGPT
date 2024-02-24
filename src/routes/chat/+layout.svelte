@@ -49,7 +49,7 @@
 		>
 			<input class="m-2 w-auto btn btn-primary" type="submit" value="New Chat" />
 		</form>
-		<div class="chats overflow-y-scroll">
+		<div class="chats overflow-y-auto">
 			{#if data.chats}
 				{#each data.chats as chat}
 					<button

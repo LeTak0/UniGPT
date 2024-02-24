@@ -8,7 +8,7 @@
 	$: displayedChats = data.chats.slice(0, 6);
 </script>
 
-<div class="previous overflow-y-scroll">
+<div class="previous overflow-y-auto">
 	<div class="p-4 border border-primary-subtle rounded bg-primary-subtle">
 		<h3>Start a new conversation!</h3>
 		<br>
