@@ -1,6 +1,8 @@
 <script>
 	/** @type {boolean} */
 	export let showModal;
+	/** @type {string} */
+	 export let username;
 
 	/** @type {HTMLDialogElement}*/
 	let dialog;
@@ -15,10 +17,25 @@
 	}
 
 	function save(){
-		
+		fetch(`/api/users/${username}/password`, {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({password: newPassword})
+		}).then(async res => {
+			if (!res.ok) throw new Error(await res.text());
+			return res;
+		}).then(close)
+		.catch(err => {
+			error = err.message;
+		});
 	}
 
+	/** @type {string} */
 	let newPassword = '';
+	/** @type {string | null} */
+	let error = null;
 </script>
 <dialog bind:this={dialog} on:close={() => (showModal = false)} class="rounded border">
 	<div class="row align-items-center  mb-4">
@@ -40,6 +57,11 @@
 			bind:value={newPassword}
 		/>
 	</div>
+	{#if error}
+		<div class="alert alert-danger" role="alert">
+			{error}
+		</div>
+	{/if}
 	<div class="modal-footer col">
 		<button type="button" class="btn btn-primary me-2" on:click={save}>Set Password</button>
 	</div>

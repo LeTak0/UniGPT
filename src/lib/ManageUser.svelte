@@ -58,7 +58,7 @@
 </script>
 
 <DeleteConfirm bind:showModal={showDeleteConfirm} on:delete={deleteConfirm} />
-<SetPassword bind:showModal={showPasswordReset} />
+<SetPassword bind:showModal={showPasswordReset} bind:username={currentUsername}/>
 <dialog bind:this={dialog} on:close={() => (username = null)} class="rounded border">
 	<div class="row align-items-center mb-3">
 		<div class="col">

@@ -190,7 +190,7 @@ export async function loginUser(username, password) {
  * @param {string} password
  * @returns {Promise<boolean>} success
  */
-export async function createUser(username, password) {
+export async function createUser(username, password, role = 'user') {
 	let user = await getUserFull(username);
 	if (user) return Promise.reject(new Error('User already exists'));
 
@@ -198,7 +198,27 @@ export async function createUser(username, password) {
 	const salt = await bcrypt.genSalt(10);
 	const hashedPassword = await bcrypt.hash(password, salt);
 
-	await addUser(username, hashedPassword, salt, 'user');
+	await addUser(username, hashedPassword, salt, role);
+
+	return true;
+}
+
+/**
+ * @param {string} username
+ * @param {string} password
+ * @returns {Promise<boolean>} success
+ */
+export async function updatePassword(username, password) {
+	let user = await getUserFull(username);
+	if (!user) return false;
+
+	// Hash the password
+	const salt = await bcrypt.genSalt(10);
+	const hashedPassword = await bcrypt.hash(password, salt);
+
+	let affected = await userDB.edit({ username: username }, { password: hashedPassword, salt: salt });
+
+	if (affected.length === 0) return Promise.reject();
 
 	return true;
 }
@@ -267,7 +287,7 @@ export async function getChats(username) {
 /**
  * @param {string} username
  * @param {string} chatName
- * @returns {Promise<{role:string,content:string,name:string}[]>} chatHistory
+ * @returns {Promise<{role:string,content:MessageContent,name:string}[]>} chatHistory
  */
 export async function getChatHistory(username, chatName) {
 	let userChatsPath = path.join(chatsFolderPath, username);
@@ -284,7 +304,7 @@ export async function getChatHistory(username, chatName) {
  * 
  * @param {string} username 
  * @param {string} chatName 
- * @param {{role:string,content:string}[]} history 
+ * @param {{role:string,content:MessageContent,name:string}[]} history 
  */
 export async function updateChatHistory(username, chatName, history) {
 	let userChatsPath = path.join(chatsFolderPath, username);

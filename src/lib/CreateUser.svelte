@@ -1,0 +1,125 @@
+<script>
+	import { invalidate } from '$app/navigation';
+
+	/** @type {boolean} */
+	export let showModal;
+
+	/** @type {HTMLDialogElement}*/
+	let dialog;
+
+	$: if (dialog && showModal) {
+		dialog.showModal();
+	}
+
+	function close() {
+		username = "";
+		password = "";
+		userRole = "user";
+		dialog.close();
+	}
+
+	async function save() {
+
+		await fetch(`/api/users`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({username, password, userRole})
+		})
+		.then(async res => {
+			if (!res.ok) throw new Error(await res.text());
+			return res;
+		})
+		.then(async () => {
+			await invalidate("app:admin:users");
+			close();
+		})
+		.catch(err => {
+			error = err.message;
+		});
+
+	}
+
+	let username = '';
+	let password = '';
+	let userRole = 'user';
+
+	/** @type {string | null} */
+	let error = null;
+
+	$: if(userRole) console.log(userRole);
+
+</script>
+
+<dialog bind:this={dialog} on:close={() => { showModal = false; }} class="rounded border">
+	<div class="row align-items-center mb-3">
+		<div class="col">
+			<h1>Edit User</h1>
+		</div>
+		<div class="col col-md-auto">
+			<button type="button" class="btn-close" aria-label="Close" on:click={close} />
+		</div>
+	</div>
+	<div class="d-flex flex-column justify-content-start align-items-start">
+		<div class="input-group mb-3">
+			<span class="input-group-text">Username</span>
+			<input
+				type="text"
+				class="form-control"
+				placeholder="Username"
+				bind:value={username}
+			/>
+		</div>
+		<div class="input-group mb-3">
+			<span class="input-group-text">Password</span>
+			<input
+				type="password"
+				class="form-control"
+				placeholder="Password"
+				bind:value={password}
+			/>
+		</div>
+		<div class="btn-group mb-3">
+			<div class="input-group">
+				<span class="input-group-text">Role</span>
+				<input
+					type="radio"
+					class="btn-check"
+					name="options"
+					id="roleOptionUser"
+					autocomplete="off"
+					value="user"
+					bind:group={userRole}
+				/>
+				<label class="btn btn-outline-primary form-control" for="roleOptionUser">User</label>
+				<input
+					type="radio"
+					class="btn-check"
+					name="options"
+					id="roleOptionAdmin"
+					autocomplete="off"
+					value="admin"
+					bind:group={userRole}
+				/>
+				<label
+					class="btn btn-outline-warning form-control justify-items-center pe-4"
+					for="roleOptionAdmin">Admin</label
+				>
+			</div>
+		</div>
+	</div>
+
+	{#if error}
+		<div class="alert alert-danger" role="alert">
+			{error}
+		</div>
+	{/if}
+
+	<div class="modal-footer col">
+		<button type="button" class="btn btn-danger me-2" on:click={close}>
+			Discard
+		</button>
+		<button type="button" class="btn btn-primary" on:click={save}>Create</button>
+	</div>
+</dialog>

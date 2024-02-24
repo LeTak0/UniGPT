@@ -20,13 +20,15 @@ export async function sendMessageInChat(username,chatname,message){
 	let history = await getChatHistory(username,chatname);
 
 	// Append new user message to history
-	history.push({ role: "user", content: message, name: username });
+	history.push({ role: "user", content: [
+		{ type: "text", text: message }
+	], name: username });
 
 	updateChatHistory(username,chatname,history);
 
 	const stream = openai.beta.chat.completions.stream({
 		messages: [
-			{ role: "system", content: "You are a math tutor. Be kind to your students and help them learn math. You must use Tex notation for Formulas. To write equations inline use \\(\\)."},
+			{ role: "system", content: "You are a math tutor. Be kind to your students and help them learn and better understand math. You must use Tex notation for Formulas. To write equations inline use \\(\\)."},
 			...history
 		],
 		model:config.openAiModelName,

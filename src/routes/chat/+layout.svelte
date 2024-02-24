@@ -40,7 +40,7 @@
 <div class="layout w-100 h-100 bg-light">
 	<DeleteConfirm showModal={deleteConfirmOpen} on:delete={deleteConfirm} />
 	<div class="d-flex flex-column bg-body w-100 h-100 overflow-hidden">
-		<a class="text-center text-black fw-bold text-decoration-none" href="/chat">Your Chats</a>
+		<a class="nav-link link-secondary fw-bold mt-2 text-center" href="/chat">Your Chats</a>
 		<form
 			class="w-100 d-flex justify-content-center"
 			method="POST"

@@ -4,10 +4,11 @@ import { roleShema, usernameShema } from '$lib/server/validationTypes';
 import { json , text } from '@sveltejs/kit';
 import Joi from 'joi';
 
+
+
 const userGetSchema = Joi.object({
 	username: usernameShema
 });
-
 
 /** @type {import('./$types').RequestHandler} */
 export async function GET({ params, locals }) {

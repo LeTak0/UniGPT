@@ -4,6 +4,9 @@
 	let password = '';
 	let showError = false;
 
+	/**
+	 * @param {{ preventDefault: () => void; }} event
+	 */
 	async function register(event) {
 		// Prevent the default form submission
 		event.preventDefault();

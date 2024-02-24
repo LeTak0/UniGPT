@@ -1,4 +1,6 @@
 <script>
+	import { invalidate } from '$app/navigation';
+	import CreateUser from '$lib/CreateUser.svelte';
 	import DeleteConfirm from '$lib/DeleteConfirm.svelte';
 	import ManageUser from '$lib/ManageUser.svelte';
 
@@ -14,9 +16,25 @@
 	$: selected = Object.keys(selection).filter(key => selection[key]);
 
 	let showDeleteConfirm = false;
+	let showUserCreate = false;
 
 	function deleteMultipleConfirm(){
-		//TODO
+		let users = selected;
+
+		fetch(`/api/users`, {
+			method: 'DELETE',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({users})
+		}).then(async res => {
+			await invalidate("app:admin:users");
+		}).catch(err => {
+			console.error(err);
+		}).finally(() => {
+			showDeleteConfirm = false;
+		});
+
 		close();
 	}
 </script>
@@ -31,10 +49,11 @@
 		</ul>
 	</DeleteConfirm>
 	<ManageUser bind:username />
+	<CreateUser bind:showModal={showUserCreate}/>
 	<h1 class="pb-2">Users</h1>
 	<div class="pb-4 btn-toolbar justify-content-between" role="toolbar">
 		<div>
-			<input type="button" class="btn me-2 btn-primary" value="New User" />
+			<input type="button" class="btn me-2 btn-primary" value="New User" on:click={() => showUserCreate = true}/>
 			<input type="button" class="btn me-2 btn-danger" value="Delete" disabled={selected.length < 1} on:click={() => showDeleteConfirm = true}/>
 		</div>
 		<!-- No good way to perform search yet
