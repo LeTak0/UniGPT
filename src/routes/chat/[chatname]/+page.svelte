@@ -4,6 +4,8 @@
 	import { typesetPage } from '$lib/MathJaxHook';
 	import { onMount, tick } from 'svelte';
 
+	let dragAndDropEnabled = false;
+
 	/** @type {import('./$types').PageData} */
 	export let data;
 
@@ -84,8 +86,8 @@
 		await typesetPage();
 		scrollDown();
 
-		//uploadSection.addEventListener('dragover', onDragEnter);
-		//uploadSection.addEventListener('drop', onDragDrop);
+		uploadSection.addEventListener('dragover', onDragEnter);
+		uploadSection.addEventListener('drop', onDragDrop);
 	});
 
 	afterNavigate(async () => {
@@ -146,6 +148,7 @@
 
 		console.log(base64);
 	}
+	let form;
 
 </script>
 
@@ -173,7 +176,7 @@
 		/>
 		<input class="btn btn-secondary" type="submit" value="Rename" />
 	</form>
-	<div class="flex-grow-1 overflow-y-scroll" bind:this={scrollContainer}>
+	<div class="flex-grow-1 overflow-y-auto" bind:this={scrollContainer}>
 		{#if data.history}
 			{#each data.history as message (message)}
 				<p>
@@ -204,74 +207,97 @@
 			</div>
 		{/if}
 	</div>
-	<form class="d-flex flex-row bg-light m-2 mt-3 p-2 bg-body rounded-4" on:submit={onSend}>
-		<div class="d-flex flex-grow-1" bind:this={uploadSection} >
-			<div class="w-100 flex-grow-1 attach {showUpload ? "visible":""}">
-				<i class="bi bi-upload"></i>
+	<form class="d-flex flex-row bg-light m-2 mt-3 p-2 bg-body rounded-4 align-items-end" on:submit={onSend} bind:this={form}>
+		<div class="flex-grow-1 h-100 chat-input align-self-center {showUpload ? "visible":""}" bind:this={uploadSection} >
+			<div class="chat-attachment flex-grow">
+				<i class="bi bi-upload fs-3"></i>
 				<p>Drag and drop an image here</p>
 			</div>
 			<input
-				class="flex-grow-1 bg-transparent border-0 px-2"
+				class="h-100 chat-field bg-transparent border-0 px-2"
 				type="text"
 				placeholder="Send a message"
 				min="1"
 				bind:value={messageInput}
 			/>
 		</div>
-		<button class="btn btn-outline-secondary ms-2" on:click={() => showUpload = !showUpload}><i class="bi bi-upload"></i></button>
-		<input class="p-1 ms-2 rounded-3 btn btn-primary px-2 py-1" type="submit" value="Senden" />
+		{#if showUpload}
+			<button class="btn btn-outline-secondary ms-2 square" on:click={() => showUpload = !showUpload}><i class="bi bi-upload"></i></button>
+		{/if}
+		<button class="btn btn-primary p-2 ms-2 rounded-circle square" on:click={() => form.submit()}><i class="bi bi-send"></i></button>
 	</form>
 </div>
 
 <style>
+	.square {
+		width: 2.5rem;
+		height: 2.5rem;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
 	.chat {
 		display: grid;
 		grid-template-rows: min-content 1fr min-content;
 	}
 
-	.attach {
-		background-color: var(--bs-gray-100);
-		border-color: var(--bs-gray-200);
-		position: relative;
-		width:100%;
-		height:100%;
-		border:solid 0.2rem;
-		border-radius: 0.5rem;
-		border-style: dashed;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		flex-flow: column;
-		transition: max-height 0.5s, max-width 0s, opacity 0.5s;
+	.chat-input {
+		display: grid;
+		grid-template-rows: 0px 1fr;
+
+		transition: all 0.5s;
 		transition-timing-function: ease;
-    	max-height: 0px;
-		max-width: 0px;
-		overflow: hidden;
-		padding: 0rem;
-		border: none;
+	}
+
+	.chat-input.visible {
+		grid-template-rows: 1fr min-content;
+	}
+
+	.chat-input * {
+		transition: all 0.5s;
+		transition-timing-function: ease;
+	}
+
+	.chat-field {
+		flex-grow: 1;
+	}
+
+	.chat-input .chat-attachment {
+		height: 0px;
+		flex-grow: 0;
 		opacity: 0;
+		margin-bottom: 0rem;
 	}
-
-	.attach i {
-		font-size: 2rem;
+	.chat-input.visible .chat-attachment {
+		height: unset;
+		flex-grow: 1;
+		opacity: 1;
+		padding: 1rem;
+		margin-bottom: 0.4rem;
 	}
-
-	.attach.visible {
-    	max-height: 10dvh;
-		max-width: 100dvw;
-		padding: 4rem;
-		border: dashed;
+	
+	.chat-input .chat-field {
+		height: unset;
+		flex-grow: 1;
 		opacity: 1;
 	}
 
-	.attach + input {
-		transition: max-height 0.5s, max-width 0s;
-		max-height: 100dvh;
-		max-width: 100dvw;
-	}
+	.chat-attachment {
+		display: flex;
 
-	.attach.visible + input {
-		max-height: 0px;
-		max-width: 0px;
+		background-color: var(--bs-gray-100);
+		border-color: var(--bs-gray-100);
+
+		border: solid;
+		border-width: 0.15rem;
+		border-radius: 0.5rem;
+		border-style: dashed;
+
+		justify-content: center;
+		align-items: center;
+		flex-flow: column;
+
+		overflow: hidden;
 	}
 </style>
