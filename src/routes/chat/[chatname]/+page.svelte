@@ -22,7 +22,7 @@
 	 * @param {{ preventDefault: () => void; }} e
 	 */
 	async function onSend(e) {
-		e.preventDefault();
+		//e.preventDefault();
 
 		if(messageInput.length < 1) return;
 
@@ -207,7 +207,7 @@
 			</div>
 		{/if}
 	</div>
-	<form class="d-flex flex-row bg-light m-2 mt-3 p-2 bg-body rounded-4 align-items-end" on:submit={onSend} bind:this={form}>
+	<form class="d-flex flex-row bg-light m-2 mt-3 p-2 bg-body rounded-4 align-items-end" bind:this={form}>
 		<div class="flex-grow-1 h-100 chat-input align-self-center {showUpload ? "visible":""}" bind:this={uploadSection} >
 			<div class="chat-attachment flex-grow">
 				<i class="bi bi-upload fs-3"></i>
@@ -224,7 +224,7 @@
 		{#if showUpload}
 			<button class="btn btn-outline-secondary ms-2 square" on:click={() => showUpload = !showUpload}><i class="bi bi-upload"></i></button>
 		{/if}
-		<button class="btn btn-primary p-2 ms-2 rounded-circle square" on:click={() => form.submit()}><i class="bi bi-send"></i></button>
+		<button class="btn btn-primary p-2 ms-2 rounded-circle square" on:click={() => onSend(null)}><i class="bi bi-send"></i></button>
 	</form>
 </div>
 
