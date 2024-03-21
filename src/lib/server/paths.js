@@ -5,9 +5,18 @@ const chatCsvPath = 'data/chat.csv';
 
 const chatsFolderPath = 'data/chats/';
 
+const configFolderPath = 'data/config';
+const configSystemPrompt = 'data/config/system_prompt.txt';
+
+const configTools = 'data/config/tools.json';
+
 export {
 	usersCsvPath,
 	sessionsCsvPath,
 	chatCsvPath,
-	chatsFolderPath
+	chatsFolderPath,
+
+	configFolderPath,
+	configSystemPrompt,
+	configTools
 }

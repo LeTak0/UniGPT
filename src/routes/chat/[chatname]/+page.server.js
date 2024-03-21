@@ -12,7 +12,9 @@ const chatLoadShema = Joi.object({
 });
 
 
-/** @type {import('./$types').PageServerLoad } */
+/** @type {import('./$types').PageServerLoad } 
+ *  @returns Promise<{ history: ChatHistoryMessages, chatname : string }>
+*/
 export async function load({ params, locals }) {
 	if (!await validateRole(locals, 'user')) return fail(403, {message:'You are not authorized to load this chat'});
 

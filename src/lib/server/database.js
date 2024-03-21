@@ -287,7 +287,7 @@ export async function getChats(username) {
 /**
  * @param {string} username
  * @param {string} chatName
- * @returns {Promise<{role:string,content:MessageContent,name:string}[]>} chatHistory
+ * @returns {Promise<ChatHistory>} chatHistory
  */
 export async function getChatHistory(username, chatName) {
 	let userChatsPath = path.join(chatsFolderPath, username);

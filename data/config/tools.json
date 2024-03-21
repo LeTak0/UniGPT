@@ -1,0 +1,28 @@
+[
+	{
+		"type": "function",
+		"function": {
+			"description": "Create geogebra Document",
+			"name": "create_geogebra_doc",
+			"parameters": {
+				"type": "object",
+				"properties": {
+					"expressions": {
+						"type": "array",
+						"items": {
+							"type": "object",
+							"properties": {
+								"value": {
+									"type": "string"
+								},
+								"label": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+]

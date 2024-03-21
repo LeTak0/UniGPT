@@ -37,6 +37,10 @@
 	}
 </script>
 
+<svelte:head>
+	<script src="https://www.geogebra.org/apps/deployggb.js"></script>
+</svelte:head>
+
 <div class="layout w-100 h-100 bg-light">
 	<DeleteConfirm showModal={deleteConfirmOpen} on:delete={deleteConfirm} />
 	<div class="d-flex flex-column bg-body w-100 h-100 overflow-hidden">

@@ -8,4 +8,7 @@ node_modules
 !.env.example
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
-/data/
+/data/chats
+/data/chat.csv
+/data/sessions.csv
+/data/users.csv

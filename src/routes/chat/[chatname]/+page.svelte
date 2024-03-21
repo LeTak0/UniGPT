@@ -1,6 +1,7 @@
 <script>
 	import { enhance } from '$app/forms';
-	import { afterNavigate } from '$app/navigation';
+	import { afterNavigate, invalidateAll } from '$app/navigation';
+	import ChatMessage from '$lib/ChatMessage.svelte';
 	import { typesetPage } from '$lib/MathJaxHook';
 	import { onMount, tick } from 'svelte';
 
@@ -24,14 +25,14 @@
 	async function onSend(e) {
 		//e.preventDefault();
 
-		if(messageInput.length < 1) return;
+		if (messageInput.length < 1) return;
 
 		if (requestRunning) return;
 
 		requestRunning = true;
 		data.history = [...data.history, { role: 'user', content: messageInput, name: 'You' }];
 
-		data.history = [...data.history, { role: 'assistant', content: '', name: 'AI' }];
+		data.history = [...data.history, { role: 'assistant', content: '', name: 'AI' , tool_calls: null}];
 
 		await fetch('/api/chat', {
 			method: 'POST',
@@ -42,8 +43,9 @@
 		}).then((res) => {
 			if (!res.body) return;
 
-			if(res.status != 200) {
-				data.history[data.history.length - 1].content = "Sorry, we had trouble connecting to the AI. Please try again later.";
+			if (res.status != 200) {
+				data.history[data.history.length - 1].content =
+					'Sorry, we had trouble connecting to the AI. Please try again later.';
 				return;
 			}
 
@@ -58,6 +60,7 @@
 						reader.read().then(({ done, value }) => {
 							if (done) {
 								controller.close();
+								invalidateAll();
 								typesetPage();
 								scrollDown();
 								return;
@@ -108,18 +111,18 @@
 		reentered = true;
 
 		setTimeout(() => {
-			if(!reentered) {
+			if (!reentered) {
 				showUpload = false;
 			}
 		}, 1000);
 	}
 
-	function imageToBase64(file){
+	function imageToBase64(file) {
 		return new Promise((resolve, reject) => {
 			const reader = new FileReader();
 			reader.readAsDataURL(file);
 			reader.onload = () => resolve(reader.result);
-			reader.onerror = error => reject(error);
+			reader.onerror = (error) => reject(error);
 		});
 	}
 
@@ -135,11 +138,11 @@
 		let file = e.dataTransfer.files.item(0);
 		let base64 = '';
 
-		if(file.type.startsWith('image/')) {
+		if (file.type.startsWith('image/')) {
 			let reader = new FileReader();
 			reader.readAsDataURL(file);
 			reader.onload = () => {
-				if(reader.result) {
+				if (reader.result) {
 					base64 = reader.result.toString();
 					console.log(base64);
 				}
@@ -179,20 +182,7 @@
 	<div class="flex-grow-1 overflow-y-auto" bind:this={scrollContainer}>
 		{#if data.history}
 			{#each data.history as message (message)}
-				<p>
-					<b>{message.role == 'user' ? 'You' : 'Assistant'}:</b>
-					{#if typeof message.content == 'string'}
-						{message.content}
-					{:else}
-						{#each message.content as con (con)}
-							{#if con.type == 'text'}
-								{con.text}
-							{:else if con.type == 'image_url'}
-								<img src={con.image_url.url} alt="user provided"/>
-							{/if}
-						{/each}
-					{/if}
-				</p>
+				<ChatMessage data={message} />
 			{/each}
 		{/if}
 		{#if data.history && data.history.length < 1}
@@ -207,10 +197,16 @@
 			</div>
 		{/if}
 	</div>
-	<form class="d-flex flex-row bg-light m-2 mt-3 p-2 bg-body rounded-4 align-items-end" bind:this={form}>
-		<div class="flex-grow-1 h-100 chat-input align-self-center {showUpload ? "visible":""}" bind:this={uploadSection} >
+	<form
+		class="d-flex flex-row bg-light m-2 mt-3 p-2 bg-body rounded-4 align-items-end"
+		bind:this={form}
+	>
+		<div
+			class="flex-grow-1 h-100 chat-input align-self-center {showUpload ? 'visible' : ''}"
+			bind:this={uploadSection}
+		>
 			<div class="chat-attachment flex-grow">
-				<i class="bi bi-upload fs-3"></i>
+				<i class="bi bi-upload fs-3" />
 				<p>Drag and drop an image here</p>
 			</div>
 			<input
@@ -222,9 +218,14 @@
 			/>
 		</div>
 		{#if showUpload}
-			<button class="btn btn-outline-secondary ms-2 square" on:click={() => showUpload = !showUpload}><i class="bi bi-upload"></i></button>
+			<button
+				class="btn btn-outline-secondary ms-2 square"
+				on:click={() => (showUpload = !showUpload)}><i class="bi bi-upload" /></button
+			>
 		{/if}
-		<button class="btn btn-primary p-2 ms-2 rounded-circle square" on:click={() => onSend(null)}><i class="bi bi-send"></i></button>
+		<button class="btn btn-primary p-2 ms-2 rounded-circle square" on:click={() => onSend(null)}
+			><i class="bi bi-send" /></button
+		>
 	</form>
 </div>
 
@@ -276,7 +277,7 @@
 		padding: 1rem;
 		margin-bottom: 0.4rem;
 	}
-	
+
 	.chat-input .chat-field {
 		height: unset;
 		flex-grow: 1;
