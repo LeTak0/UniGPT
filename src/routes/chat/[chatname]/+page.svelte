@@ -1,4 +1,6 @@
 <script>
+	import { t } from '$lib/translations';
+
 	import { enhance } from '$app/forms';
 	import { afterNavigate, invalidateAll } from '$app/navigation';
 	import ChatMessage from '$lib/ChatMessage.svelte';
@@ -177,7 +179,7 @@
 			min="1"
 			pattern="^[a-zA-Z0-9_\-!?. ]+$"
 		/>
-		<input class="btn btn-secondary" type="submit" value="Rename" />
+		<input class="btn btn-secondary" type="submit" value={$t('common.rename')} />
 	</form>
 	<div class="flex-grow-1 overflow-y-auto" bind:this={scrollContainer}>
 		{#if data.history}

@@ -1,0 +1,14 @@
+{
+	"delete" : "Delete",
+	"edit" : "Edit",
+	"cancel" : "Cancel",
+	"confirm" : "Confirm",
+	"save" : "Save",
+	"create" : "Create",
+	"ok" : "OK",
+	"close" : "Schließen",
+	"rename": "Rename",
+	"send": "Send",
+	"register": "Register",
+	"login" : "Login"
+}

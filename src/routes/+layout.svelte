@@ -1,4 +1,5 @@
 <script>
+
 	import { goto, invalidate } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { base } from '$app/paths';
