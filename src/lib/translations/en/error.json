@@ -1,0 +1,8 @@
+{
+	"registration.disabled" : "Registration is disabled",
+	"registration.password.invalid" : "Password must be at least 8 characters long",
+	"registratzion.unsername.invalid" : "Username must be at least 3 characters long",
+	"registration.username.exists" : "Username already exists",
+	"unknown": "An unknown error occurred. Please try again later.",
+	"login.invalid" : "Invalid username or password"
+}

@@ -10,5 +10,19 @@
 	"rename" : "Umbenennen",
 	"send": "Senden",
 	"register": "Registrieren",
-	"login": "Anmelden"
+	"login": "Anmelden",
+	"logout": "Abmelden",
+	"back": "Zurück",
+	"chat": "Chat",
+	"adminPanel": "Verwalten",
+	"welcome": "Willkommen zu UniGPT",
+	"welcomeText": "Dein Einstieg in die Welt der Künstlichen Intelligenz",
+	"welcomeButton": "Los geht's 🚀",
+	"username": "Nutzername",
+	"password": "Passwort",
+	"role": "Rolle",
+	"reset": "Zurücksetzen",
+	"discard":"Verwerfen",
+	"sure":"Bist du sicher?",
+	"yesDelete": "Ja, löschen"
 }

@@ -287,7 +287,7 @@ export async function getChats(username) {
 /**
  * @param {string} username
  * @param {string} chatName
- * @returns {Promise<ChatHistory>} chatHistory
+ * @returns {Promise<import('openai/resources/index.mjs').ChatCompletionMessageParam[]>} chatHistory
  */
 export async function getChatHistory(username, chatName) {
 	let userChatsPath = path.join(chatsFolderPath, username);
@@ -304,7 +304,7 @@ export async function getChatHistory(username, chatName) {
  * 
  * @param {string} username 
  * @param {string} chatName 
- * @param {{role:string,content:MessageContent,name:string}[]} history 
+ * @param {import("openai/resources/index.mjs").ChatCompletionMessageParam[]} history 
  */
 export async function updateChatHistory(username, chatName, history) {
 	let userChatsPath = path.join(chatsFolderPath, username);

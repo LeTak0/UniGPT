@@ -1,4 +1,6 @@
 <script>
+	import { t } from '$lib/translations';
+
 	import { createEventDispatcher } from "svelte";
 	let dispatch = createEventDispatcher();
 
@@ -25,13 +27,13 @@
 <dialog bind:this={dialog} on:close={() => (showModal = false)} class="rounded border">
 	<div class="row align-items-center">
 		<div class="col">
-			<h1>Delete</h1>
+			<h1>{$t('common.delete')}</h1>
 		</div>
 		<div class="col col-md-auto">
 			<button type="button" class="btn-close" aria-label="Close" on:click={close} />
 		</div>
 	</div>
-	<p>Are you sure?</p>
+	<p>{$t('common.sure')}</p>
 	<slot />
-	<button type="button" class="btn btn-danger me-2" on:click={deleteConfirm}>Yes, Delete</button>
+	<button type="button" class="btn btn-danger me-2" on:click={deleteConfirm}>{$t('common.yesDelete')}</button>
 </dialog>	

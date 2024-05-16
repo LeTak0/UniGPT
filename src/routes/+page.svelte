@@ -1,19 +1,14 @@
+<script>
+	import { t } from '$lib/translations';
+</script>
 
 <div class="d-flex flex-column justify-self-start">
-	<h1>Welcome to UniGPT</h1>
+	<h1 class="align-center mt-4">{$t("common.welcome")}</h1>
 	<div class="container-sm">
-		<p>Your gateway to AI-powered conversations.</p>
+		<p>{$t("common.welcomeText")}</p>
 	</div>
 
 	<a class="btn btn-primary m-4 shadow" href="chat">
-		Get started 🚀
+		{$t("common.welcomeButton")}
 	</a>
 </div>
-
-<style>
-	/* Add your CSS styles here */
-	h1 {
-		text-align: center;
-		margin-top: 2rem;
-	}
-</style>

@@ -32,9 +32,8 @@
 		if (requestRunning) return;
 
 		requestRunning = true;
-		data.history = [...data.history, { role: 'user', content: messageInput, name: 'You' }];
-
-		data.history = [...data.history, { role: 'assistant', content: '', name: 'AI' , tool_calls: null}];
+		data.history = [...(data.history ||[]), { role: 'user', content: messageInput, name: 'You' }];
+		data.history = [...(data.history ||[]), { role: 'assistant', content: '', tool_calls: undefined, name: 'Assistant'}];
 
 		await fetch('/api/chat', {
 			method: 'POST',
@@ -77,6 +76,10 @@
 					}
 				}
 			});
+		}).catch((err) => {
+			console.error(err);
+			data.history[data.history.length - 1].content =
+				'Sorry, we had trouble connecting to the AI. Please try again later.';
 		});
 
 		requestRunning = false;
@@ -130,7 +133,7 @@
 
 	let uploadedFiles = new Array();
 	/**
-	 * @param {{ preventDefault: () => void; stopPropagation: () => void; }} e
+	 * @param {{ preventDefault: () => void; stopPropagation: () => void; dataTransfer: DataTransfer }} e
 	 */
 	function onDragDrop(e) {
 		e.preventDefault();
@@ -138,6 +141,8 @@
 		showUpload = false;
 
 		let file = e.dataTransfer.files.item(0);
+		if (!file) return;
+		
 		let base64 = '';
 
 		if (file.type.startsWith('image/')) {
@@ -214,7 +219,7 @@
 			<input
 				class="h-100 chat-field bg-transparent border-0 px-2"
 				type="text"
-				placeholder="Send a message"
+				placeholder={$t('chat.messageBoxPlaceholder')}
 				min="1"
 				bind:value={messageInput}
 			/>

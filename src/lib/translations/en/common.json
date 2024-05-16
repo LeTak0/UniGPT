@@ -10,5 +10,20 @@
 	"rename": "Rename",
 	"send": "Send",
 	"register": "Register",
-	"login" : "Login"
+	"login" : "Login",
+	"logout" : "Logout",
+	"back" : "Back",
+	"chat" : "Chat",
+	"adminPanel": "Manage",
+	"welcome": "welcome to UniGPT",
+	"welcomeText": "Your gateway to AI-powered conversations.",
+	"welcomeButton": "Get started 🚀",
+	"username": "username",
+	"password": "password",
+	"role": "role",
+	"manage": "Verwalten",
+	"reset": "Reset",
+	"discard":"Discard",
+	"sure":"Are you sure?",
+	"yesDelete": "Yes, delete"
 }

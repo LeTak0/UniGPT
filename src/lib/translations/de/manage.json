@@ -1,0 +1,16 @@
+{
+	"welcome": "Willkommen im Admin-Panel!",
+	"whatWouldYou": "Was möchtest du tun?",
+	"manageUsers": "Benutzer verwalten",
+	"manageUsersLink": "Zur Benutzerverwaltung →",
+	"manageGPT": "GPT-Einstellungen verwalten",
+	"manageGPTLink": "Zu den GPT-Einstellungen →",
+	"adminPanel": "Admin-Panel",
+	"userManagement": "Benutzerverwaltung",
+	"gptSettings": "GPT-Einstellungen",
+	"newUser": "Neuer Nutzer",
+	"users": "Benutzer",
+	"editUser": "Benutzer bearbeiten",
+	"createUser": "Benutzer erstellen",
+	"deleteMultipleUsers": "Diese Aktion löscht folgende Benutzer: "
+}

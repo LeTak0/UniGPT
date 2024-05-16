@@ -2,6 +2,8 @@
 	/** @type {import('./$types').LayoutData} */
 	export let data;
 
+	import { t } from '$lib/translations';
+
 	import { enhance } from '$app/forms';
 	import { goto, invalidate } from '$app/navigation';
 	import { base } from '$app/paths';
@@ -44,14 +46,14 @@
 <div class="layout w-100 h-100 bg-light">
 	<DeleteConfirm showModal={deleteConfirmOpen} on:delete={deleteConfirm} />
 	<div class="d-flex flex-column bg-body w-100 h-100 overflow-hidden">
-		<a class="nav-link link-secondary fw-bold mt-2 text-center" href="/chat">Your Chats</a>
+		<a class="nav-link link-secondary fw-bold mt-2 text-center" href="/chat">{$t('chat.yourChats')}</a>
 		<form
 			class="w-100 d-flex justify-content-center"
 			method="POST"
 			action="{base}/api/newChat"
 			use:enhance
 		>
-			<input class="m-2 w-auto btn btn-primary" type="submit" value="New Chat" />
+			<input class="m-2 w-auto btn btn-primary" type="submit" value={$t('chat.newChat')} />
 		</form>
 		<div class="chats overflow-y-auto">
 			{#if data.chats}
@@ -65,7 +67,7 @@
 						on:click={() => deleteChat(chat.name)}><i class="bi bi-trash"></i></button>
 				{/each}
 			{:else}
-				<p class="m-2">No chats yet</p>
+				<p class="m-2">{$t('chat.noChats')}</p>
 			{/if}
 		</div>
 	</div>

@@ -1,0 +1,16 @@
+{
+	"welcome":"Welcome to the admin panel!",
+	"whatWouldYou":"What would you like to do?",
+	"manageUsers":"Manage Users",
+	"manageUsersLink": "Go to user management →",
+	"manageGPT":"Manage GPT settings",
+	"manageGPTLink": "Go to GPT settings →",
+	"adminPanel":"Admin Panel",
+	"userManagement":"User Management",
+	"gptSettings":"GPT Settings",
+	"newUser": "New User",
+	"users": "Users",
+	"editUser": "Edit User",
+	"createUser": "Create User",
+	"deleteMultipleUsers": "This action will delete the following users:"
+}

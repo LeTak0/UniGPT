@@ -1,4 +1,6 @@
 <script>
+	import { t } from '$lib/translations';
+
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
 
@@ -56,5 +58,5 @@
 
 <div>
 	<div bind:this={d} />
-	<button class="btn btn-primary m-2" on:click={download}> Download Geogebra File </button>
+	<button class="btn btn-primary m-2" on:click={download}>{$t('chat.downloadGeogebra')}</button>
 </div>

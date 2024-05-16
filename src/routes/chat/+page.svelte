@@ -1,4 +1,6 @@
 <script>
+	import { t } from '$lib/translations';
+
 	/** @type {import('./$types').LayoutData} */
 	export let data;
 	import { enhance } from '$app/forms';
@@ -10,22 +12,24 @@
 
 <div class="previous overflow-y-auto">
 	<div class="p-4 border border-primary-subtle rounded bg-primary-subtle">
-		<h3>Start a new conversation!</h3>
+		<h3>{$t('chat.startANew')}</h3>
 		<br>
 		<form method="POST" action="{base}/api/newChat" use:enhance>
-			<input class="w-auto btn btn-primary" type="submit" value="New Chat" />
+			<input class="w-auto btn btn-primary" type="submit" value={$t('chat.newChat')} />
 		</form>
 	</div>
 	
 	{#if data.chats.length > 0}
 		<div class="banner pt-4">
-			<h3>Your previous conversations:</h3>
+			<h3>{$t('chat.previousConversation')}</h3>
 		</div>
 		{#each displayedChats as chat}
 			<div class="p-4 border rounded bg-secondary-subtle">
 				<h5>{chat.name}</h5>
 				<br />	
-				<a class="link-primary link-offset-2" href="{base}/chat/{chat.name}">Continue this conversation →</a>
+				<a class="link-primary link-offset-2" href="{base}/chat/{chat.name}">
+					{$t('chat.continueConversation')}
+				</a>
 			</div>
 		{/each}
 	{/if}

@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import Geogebra from './Geogebra.svelte';
 
-	/** @type {ChatHistoryMessage} */
+	/** @type {import('openai/resources/index.mjs').ChatCompletionMessageParam} */
 	export let data;
 
 	/** @type {{[index: string]: string}} */
@@ -24,10 +24,14 @@
 		{:else}
 			<b>{roleLookUp[data.role]}</b>
 			{#each data.content as con (con)}
-				{#if con.type == 'text'}
-					{con.text}
-				{:else if con.type == 'image_url'}
-					<img src={con.image_url.url} alt="user provided" />
+				{#if typeof(con) === 'string'}
+					{con}
+				{:else}
+					{#if con.type == 'text'}
+						{con.text}
+					{:else if con.type == 'image_url'}
+						<img src={con.image_url.url} alt="user provided" />
+					{/if}
 				{/if}
 			{/each}
 		{/if}
