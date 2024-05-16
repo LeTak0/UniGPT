@@ -1,4 +1,6 @@
 <script>
+	import { t } from '$lib/translations';
+
 	import { enhance } from '$app/forms';
 	import { afterNavigate, invalidateAll } from '$app/navigation';
 	import ChatMessage from '$lib/ChatMessage.svelte';
@@ -30,9 +32,8 @@
 		if (requestRunning) return;
 
 		requestRunning = true;
-		data.history = [...data.history, { role: 'user', content: messageInput, name: 'You' }];
-
-		data.history = [...data.history, { role: 'assistant', content: '', name: 'AI' , tool_calls: null}];
+		data.history = [...(data.history ||[]), { role: 'user', content: messageInput, name: 'You' }];
+		data.history = [...(data.history ||[]), { role: 'assistant', content: '', tool_calls: undefined, name: 'Assistant'}];
 
 		await fetch('/api/chat', {
 			method: 'POST',
@@ -75,6 +76,10 @@
 					}
 				}
 			});
+		}).catch((err) => {
+			console.error(err);
+			data.history[data.history.length - 1].content =
+				'Sorry, we had trouble connecting to the AI. Please try again later.';
 		});
 
 		requestRunning = false;
@@ -128,7 +133,7 @@
 
 	let uploadedFiles = new Array();
 	/**
-	 * @param {{ preventDefault: () => void; stopPropagation: () => void; }} e
+	 * @param {{ preventDefault: () => void; stopPropagation: () => void; dataTransfer: DataTransfer }} e
 	 */
 	function onDragDrop(e) {
 		e.preventDefault();
@@ -136,6 +141,8 @@
 		showUpload = false;
 
 		let file = e.dataTransfer.files.item(0);
+		if (!file) return;
+		
 		let base64 = '';
 
 		if (file.type.startsWith('image/')) {
@@ -177,7 +184,7 @@
 			min="1"
 			pattern="^[a-zA-Z0-9_\-!?. ]+$"
 		/>
-		<input class="btn btn-secondary" type="submit" value="Rename" />
+		<input class="btn btn-secondary" type="submit" value={$t('common.rename')} />
 	</form>
 	<div class="flex-grow-1 overflow-y-auto" bind:this={scrollContainer}>
 		{#if data.history}
@@ -212,7 +219,7 @@
 			<input
 				class="h-100 chat-field bg-transparent border-0 px-2"
 				type="text"
-				placeholder="Send a message"
+				placeholder={$t('chat.messageBoxPlaceholder')}
 				min="1"
 				bind:value={messageInput}
 			/>

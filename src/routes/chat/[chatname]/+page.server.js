@@ -49,6 +49,6 @@ export const actions = {
 
 		await renameChat(value.username,value.chatname,value.newName);
 
-		throw redirect(307,`${base}/chat/${newName}`);
+		redirect(307,`${base}/chat/${newName}`);
 	}
 };

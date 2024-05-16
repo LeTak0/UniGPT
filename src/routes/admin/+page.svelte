@@ -1,21 +1,22 @@
 <script>
+	import { t } from '$lib/translations';
 	import { base } from '$app/paths';
 
 </script>
 <div class="previous">
 	<div class="p-4 border border-primary-subtle rounded bg-primary-subtle">
-		<h3>Welcome to the admin Panel!</h3>
+		<h3>{$t('manage.welcome')}</h3>
 	</div>
 	<div class="banner">
-		<h5>What would you like to do?</h5>
+		<h5>{$t('manage.whatWouldYou')}</h5>
 	</div>
 	<div  class="p-4 border border-secondary-subtle rounded bg-secondary-subtle">
-		<h5>Manage Users</h5>
-		<a class="link-primary link-offset-2 pointer-cursor" href="{base}/admin/users">Go to user management →</a>
+		<h5>{$t('manage.manageUsers')}</h5>
+		<a class="link-primary link-offset-2 pointer-cursor" href="{base}/admin/users">{$t('manage.manageUsersLink')}</a>
 	</div>
 	<div  class="p-4 border border-secondary-subtle rounded bg-secondary-subtle">
-		<h5>GPT Settings</h5>
-		<a class="link-primary link-offset-2 pointer-cursor" href="{base}/admin/gpt">Go to GPT settings →</a>
+		<h5>{$t('manage.manageGPT')}</h5>
+		<a class="link-primary link-offset-2 pointer-cursor" href="{base}/admin/gpt">{$t('manage.manageGPTLink')}</a>
 	</div>
 </div>
 

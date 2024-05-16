@@ -22,17 +22,30 @@ const openai = new OpenAI({
 });
 
 /**
+ * @param {import("openai/resources/index.mjs").ChatCompletionMessageParam[]} history
+ * @param {any} tool_calls
+ * @returns {import("openai/resources/index.mjs").ChatCompletionMessageParam[]} history 
+ */
+function process_tool_calls(history, tool_calls) {
+	for (let toolCall of tool_calls) {
+		console.log(toolCall);
+		history.push({ role: "tool", content: toolCall.function.arguments, tool_call_id: toolCall.id });
+	}
+	return history;
+}
+
+/**
  * @param {string} username 
  * @param {string} chatname 
  * @param {string} message 
  * @returns {Promise<ReadableStream<Uint8Array>>}
  */
 export async function sendMessageInChat(username, chatname, message) {
-	let history = await getChatHistory(username, chatname);
+	let history = await getChatHistory(username, chatname) || [];
 
 	// Append new user message to history
 	history.push({
-		role: "user", 
+		role: "user",
 		name: username,
 		content: [{ type: "text", text: message }]
 	});
@@ -44,35 +57,35 @@ export async function sendMessageInChat(username, chatname, message) {
 			{ role: "system", content: system_prompt },
 			...history
 		],
-		model: config.openAiModelName,
+		model: /**@type {OpenAI.Chat.ChatModel} */ (config.openAiModelName) || "gpt-3.5-turbo",
 		tools: tools,
-		tool_choice: "auto"
+		tool_choice: "auto",
+		stream: true
 	});
 
-	const responseStream = new ReadableStream({
+	return new ReadableStream({
 		start(controller) {
-			stream.on('content', (delta) => {
-				let uInt8Array = new TextEncoder().encode(delta);
+			stream.on('error', (error) => {
+				console.error(error);
+				controller.error(error);
+			});
+
+			stream.on('content', (content) => {
+				let uInt8Array = new TextEncoder().encode(content);
 				controller.enqueue(uInt8Array);
 			});
 
-			stream.finalMessage().then((completion) => {
+			stream.on('finalChatCompletion', (completion) => {
 
-				history.push({ role: "assistant", content: completion.content || "", tool_calls: completion.tool_calls, name: "AI" });
+				let message = completion.choices[0].message;
 
-				if(completion.tool_calls) {
-					for (let toolCall of completion.tool_calls) {
-						history.push({ role: "tool", content: toolCall.function.arguments, tool_call_id: toolCall.id, name: "Geogebra"});
-					}
-				}
+				history.push({ role: "assistant", content: message.content || "", tool_calls: message.tool_calls, name: "AI" });
+				history = process_tool_calls(history, message.tool_calls || []);
 
-				// Update history with AI response
 				updateChatHistory(username, chatname, history);
 
 				controller.close();
 			});
 		}
 	});
-
-	return responseStream;
 }

@@ -5,7 +5,7 @@ export async function DELETE({ locals, cookies }) {
 	await deleteSession(locals?.session?.token || "");
 
 	// Delete cookie
-	cookies.delete('auth');
+	cookies.delete('auth',{ path: '/'});
 
     // Respond with success
     return new Response(JSON.stringify({ success: true }));

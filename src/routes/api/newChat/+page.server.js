@@ -14,6 +14,6 @@ export const actions = {
 
 		await createChat(event.locals.session.username,chatname);
 
-		throw redirect(307,`${base}/chat/${chatname}`);
+		redirect(307,`${base}/chat/${chatname}`);
 	}
 };

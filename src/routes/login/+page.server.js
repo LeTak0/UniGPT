@@ -28,22 +28,24 @@ export const actions = {
 		});
 
 		if(loggedIn.sucess){
-			cookies.set('auth', loggedIn.token);
+			/* @migration task: add path argument */ cookies.set('auth', loggedIn.token,{path: '/'});
 			switch(loggedIn.role){
 				case "admin":
-					throw redirect(307, '/admin');
+					redirect(307, '/admin');
+					break;
 				case "user":
 				default:
-					throw redirect(307, '/chat');
+					redirect(307, '/chat');
+					break;
 			}
 		}else{
-			return fail(401, {message: "Invalid username or password"});
+			return fail(401, {message: "error.login.invalid"});
 		}
 	},
 }
 
 export async function load({locals}) {
 	let loggedIn = await validateRole(locals, 'user');
-	if(loggedIn) throw redirect(307, '/chat');
+	if(loggedIn) redirect(307, '/chat');
 	return {};
 }

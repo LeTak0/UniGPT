@@ -1,4 +1,6 @@
 <script>
+	import { t } from '$lib/translations';
+
 	import { goto, invalidate } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { base } from '$app/paths';
@@ -34,15 +36,15 @@
 		</a>
 		<div class="d-flex flex-row align-items-center p-4">
 			{#if !data.username}
-				<a class="nav-link p-2" href="{base}/register">Register</a>
-				<a class="nav-link p-2" href="{base}/login">Login</a>
+				<a class="nav-link p-2" href="{base}/register">{$t('common.register')}</a>
+				<a class="nav-link p-2" href="{base}/login">{$t('common.login')}</a>
 			{:else}
 				{#if data.role === 'admin'}
-					<a class="nav-link p-2 mx-4 link link-underline-primary" href="{base}/admin">Admin Panel</a>
+					<a class="nav-link p-2 mx-4 link link-underline-primary" href="{base}/admin">{$t('common.adminPanel')}</a>
 				{:else}
-					<a class="nav-link p-2 mx-4 link link-underline-primary" href="{base}/chat">Chat</a>
+					<a class="nav-link p-2 mx-4 link link-underline-primary" href="{base}/chat">{$t('common.chat')}</a>
 				{/if}
-				<button class="btn btn-outline-primary" type="submit" on:click={logout}>Logout</button>
+				<button class="btn btn-outline-primary" type="submit" on:click={logout}>{$t('common.logout')}</button>
 			{/if}
 		</div>
 	</nav>

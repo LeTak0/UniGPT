@@ -1,4 +1,6 @@
 <script>
+	import { t } from '$lib/translations';
+
 	import { enhance } from '$app/forms';
 	import { invalidate, invalidateAll } from '$app/navigation';
 	import { base } from '$app/paths';
@@ -62,7 +64,7 @@
 <dialog bind:this={dialog} on:close={() => (username = null)} class="rounded border">
 	<div class="row align-items-center mb-3">
 		<div class="col">
-			<h1>Edit User</h1>
+			<h1>{$t('manage.editUser')}</h1>
 		</div>
 		<div class="col col-md-auto">
 			<button type="button" class="btn-close" aria-label="Close" on:click={close} />
@@ -70,7 +72,7 @@
 	</div>
 	<div class="d-flex flex-column justify-content-start align-items-start">
 		<div class="input-group mb-3">
-			<span class="input-group-text">Username</span>
+			<span class="input-group-text">{$t('common.username')}</span>
 			<input
 				type="text"
 				class="form-control"
@@ -81,7 +83,7 @@
 		</div>
 		<div class="btn-group mb-3">
 			<div class="input-group">
-				<span class="input-group-text">Role</span>
+				<span class="input-group-text">{$t('common.role')}</span>
 				<input
 					type="radio"
 					class="btn-check"
@@ -109,19 +111,19 @@
 			</div>
 		</div>
 		<div class="btn-group mb-3">
-			<span class="input-group-text">Password</span>
+			<span class="input-group-text">{$t('common.password')}</span>
 			<button
 				type="button"
 				class="btn btn-secondary me-2"
-				on:click={() => (showPasswordReset = true)}>Reset</button
+				on:click={() => (showPasswordReset = true)}>{$t('common.reset')}</button
 			>
 		</div>
 	</div>
 
 	<div class="modal-footer col">
 		<button type="button" class="btn btn-danger me-2" on:click={() => (showDeleteConfirm = true)}>
-			Delete
+			{$t('common.delete')}
 		</button>
-		<button type="button" class="btn btn-primary" on:click={save}>Save changes</button>
+		<button type="button" class="btn btn-primary" on:click={save}>{$t('common.save')}</button>
 	</div>
 </dialog>

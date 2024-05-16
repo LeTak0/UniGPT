@@ -1,4 +1,5 @@
 <script>
+	import { t } from '$lib/translations';
 	import { invalidate } from '$app/navigation';
 	import CreateUser from '$lib/CreateUser.svelte';
 	import DeleteConfirm from '$lib/DeleteConfirm.svelte';
@@ -41,7 +42,8 @@
 
 <div class="container p-4">
 	<DeleteConfirm bind:showModal={showDeleteConfirm} on:delete={deleteMultipleConfirm}>
-		<p>This action will delete the following users:</p>
+		<p>{$t('manage.deleteMultipleUsers')}</p>
+		
 		<ul>
 			{#each selected as username}
 				<li>{username}</li>
@@ -50,11 +52,11 @@
 	</DeleteConfirm>
 	<ManageUser bind:username />
 	<CreateUser bind:showModal={showUserCreate}/>
-	<h1 class="pb-2">Users</h1>
+	<h1 class="pb-2">{$t('manage.users')}</h1>
 	<div class="pb-4 btn-toolbar justify-content-between" role="toolbar">
 		<div>
-			<input type="button" class="btn me-2 btn-primary" value="New User" on:click={() => showUserCreate = true}/>
-			<input type="button" class="btn me-2 btn-danger" value="Delete" disabled={selected.length < 1} on:click={() => showDeleteConfirm = true}/>
+			<input type="button" class="btn me-2 btn-primary" value={$t('manage.newUser')} on:click={() => showUserCreate = true}/>
+			<input type="button" class="btn me-2 btn-danger" value={$t('common.delete')} disabled={selected.length < 1} on:click={() => showDeleteConfirm = true}/>
 		</div>
 		<!-- No good way to perform search yet
 		<div class="input-group flex-nowrap">
@@ -66,9 +68,9 @@
 		<thead>
 			<tr class="fw-bold">
 				<th />
-				<th>Username</th>
-				<th>Role</th>
-				<th>Manage</th>
+				<th>{$t('common.username')}</th>
+				<th>{$t('common.role')}</th>
+				<th>{$t('common.manage')}</th>
 			</tr>
 		</thead>
 		<tbody class="">
@@ -88,7 +90,7 @@
 							><input
 								type="button"
 								class="btn btn-light border-secondary"
-								value="Manage"
+								value={$t('common.edit')}
 								on:click={() => (username = user.username)}
 							/></td
 						>
