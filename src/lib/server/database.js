@@ -237,7 +237,7 @@ export async function createChat(username, chatName) {
 
 	//create new chat file
 	let newChatFilePath = path.join(userChatsPath, chatName + '.json');
-	fs.writeFileSync(newChatFilePath, JSON.stringify([{ role: "assistant", content: "I am your mathematical assistant. I can help you with math related questions. Try asking me something like 'What is 2+2?' or 'What is the square root of 16?'" }]));
+	fs.writeFileSync(newChatFilePath, JSON.stringify([]));
 
 	return true;
 }

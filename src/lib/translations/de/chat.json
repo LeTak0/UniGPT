@@ -7,5 +7,9 @@
 	"messageBoxPlaceholder": "Frag mich etwas!",
 	"startANew": "Starte eine neue Konversation!",
 	"previousConversation": "Deine Vorherige Konversationen:",
-	"continueConversation": "Diese Konversation weiterführen →"
+	"continueConversation": "Diese Konversation weiterführen →",
+	"emptyChat": "Los geht's! Stelle eine Frage!",
+	"thinking": "Denke nach...",
+	"geogebraFailed": "Fehler beim erstellen des Geogebra Dokuments.",
+	"gptFailed": "Ein Fehler ist aufgetreten. Bitte versuche es erneut, oder erstelle eine neue Konversation."
 }

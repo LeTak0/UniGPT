@@ -25,5 +25,6 @@
 	"reset": "Reset",
 	"discard":"Discard",
 	"sure":"Are you sure?",
-	"yesDelete": "Yes, delete"
+	"yesDelete": "Yes, delete",
+	"loading": "Loading..."
 }

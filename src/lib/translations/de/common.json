@@ -24,5 +24,6 @@
 	"reset": "Zurücksetzen",
 	"discard":"Verwerfen",
 	"sure":"Bist du sicher?",
-	"yesDelete": "Ja, löschen"
+	"yesDelete": "Ja, löschen",
+	"loading": "Lade..."
 }

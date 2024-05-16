@@ -12,11 +12,25 @@
 						"items": {
 							"type": "object",
 							"properties": {
+								"label": {
+									"type": "string"
+								},
 								"value": {
 									"type": "string"
 								},
-								"label": {
-									"type": "string"
+								"color": {
+									"type": "object",
+									"properties": {
+										"red": {
+											"type": "number"
+										},
+										"green": {
+											"type": "number"
+										},
+										"blue": {
+											"type": "number"
+										}
+									}
 								}
 							}
 						}

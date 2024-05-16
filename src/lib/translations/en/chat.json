@@ -7,5 +7,9 @@
 	"messageBoxPlaceholder": "Ask me something!",
 	"startANew": "Start a new conversation!",
 	"previousConversation": "Your previous conversations:",
-	"continueConversation": "Continue this conversation →"
+	"continueConversation": "Continue this conversation →",
+	"emptyChat": "Go ahead and ask me something!",
+	"thinking": "Thinking...",
+	"geogebraFailed": "Unable to create Geogebra file.",
+	"gptFailed": "An error occurred while processing your request. Please try again, or start a new conversation."
 }

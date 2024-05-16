@@ -23,6 +23,8 @@ export async function load({ params, locals }) {
 
 	let chatHistory = await getChatHistory(value.username,value.chatname);
 
+	if (!chatHistory) return fail(404, {message:'Chat not found'});
+
 	return {
 		history:chatHistory,
 		chatname:params.chatname

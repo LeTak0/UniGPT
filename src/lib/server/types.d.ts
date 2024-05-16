@@ -9,7 +9,12 @@ interface SessionInfo {
 
 interface GeogebraDocExpression {
 	value: string,
-	label: string
+	label: string,
+	color: {
+		red: number,
+		green: number,
+		blue: number
+	} | undefined
 }
 
 interface GeogebraDocArguments {

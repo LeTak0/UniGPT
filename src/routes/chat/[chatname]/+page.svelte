@@ -1,5 +1,6 @@
 <script>
 	import { t } from '$lib/translations';
+	import { get } from 'svelte/store'
 
 	import { enhance } from '$app/forms';
 	import { afterNavigate, invalidateAll } from '$app/navigation';
@@ -45,8 +46,9 @@
 			if (!res.body) return;
 
 			if (res.status != 200) {
-				data.history[data.history.length - 1].content =
-					'Sorry, we had trouble connecting to the AI. Please try again later.';
+				if(data.history) {
+					data.history[data.history.length - 1].content = get(t)('chat.gptFailed');
+				}
 				return;
 			}
 
@@ -78,8 +80,8 @@
 			});
 		}).catch((err) => {
 			console.error(err);
-			data.history[data.history.length - 1].content =
-				'Sorry, we had trouble connecting to the AI. Please try again later.';
+			if(data.history)
+				data.history[data.history.length - 1].content = get(t)('chat.gptFailed');
 		});
 
 		requestRunning = false;
@@ -95,7 +97,6 @@
 		scrollDown();
 
 		uploadSection.addEventListener('dragover', onDragEnter);
-		uploadSection.addEventListener('drop', onDragDrop);
 	});
 
 	afterNavigate(async () => {
@@ -121,49 +122,13 @@
 			}
 		}, 1000);
 	}
-
-	function imageToBase64(file) {
-		return new Promise((resolve, reject) => {
-			const reader = new FileReader();
-			reader.readAsDataURL(file);
-			reader.onload = () => resolve(reader.result);
-			reader.onerror = (error) => reject(error);
-		});
-	}
-
-	let uploadedFiles = new Array();
-	/**
-	 * @param {{ preventDefault: () => void; stopPropagation: () => void; dataTransfer: DataTransfer }} e
-	 */
-	function onDragDrop(e) {
-		e.preventDefault();
-		e.stopPropagation();
-		showUpload = false;
-
-		let file = e.dataTransfer.files.item(0);
-		if (!file) return;
-		
-		let base64 = '';
-
-		if (file.type.startsWith('image/')) {
-			let reader = new FileReader();
-			reader.readAsDataURL(file);
-			reader.onload = () => {
-				if (reader.result) {
-					base64 = reader.result.toString();
-					console.log(base64);
-				}
-			};
-		}
-
-		console.log(base64);
-	}
+	
 	let form;
 
 </script>
 
 <svelte:head>
-	<title>{data.chatname} - Chat</title>
+	<title>{data.chatname} - {$t('common.chat')}</title>
 	<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
 	<script
 		id="MathJax-script"
@@ -193,14 +158,14 @@
 			{/each}
 		{/if}
 		{#if data.history && data.history.length < 1}
-			<p>Unable to load chat history</p>
+			<p class="fst-italic">{$t('chat.emptyChat')}</p>
 		{/if}
 		{#if requestRunning}
 			<div class="d-flex flex-row align-items-center">
 				<div class="spinner-border m-2" role="status">
-					<span class="visually-hidden">Loading...</span>
+					<span class="visually-hidden">{$t('common.loading')}</span>
 				</div>
-				<span>Assistant is thinking...</span>
+				<span>{$t('chat.thinking')}</span>
 			</div>
 		{/if}
 	</div>
@@ -230,7 +195,7 @@
 				on:click={() => (showUpload = !showUpload)}><i class="bi bi-upload" /></button
 			>
 		{/if}
-		<button class="btn btn-primary p-2 ms-2 rounded-circle square" on:click={() => onSend(null)}
+		<button class="btn btn-primary p-2 ms-2 rounded-circle square" on:click={() => onSend({preventDefault: () => {}})}
 			><i class="bi bi-send" /></button
 		>
 	</form>

@@ -28,7 +28,6 @@ const openai = new OpenAI({
  */
 function process_tool_calls(history, tool_calls) {
 	for (let toolCall of tool_calls) {
-		console.log(toolCall);
 		history.push({ role: "tool", content: toolCall.function.arguments, tool_call_id: toolCall.id });
 	}
 	return history;

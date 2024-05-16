@@ -4,6 +4,8 @@
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
 
+	let debug = false;
+
 	/** @type {string}*/
 	// @ts-ignore
 	export let data;
@@ -25,18 +27,33 @@
 		updateApplet();
 	});
 
+	let failed = false;
 	let fileBase64 = '';
-	function updateApplet() {
+	async function updateApplet() {
 		if (d != null) d.innerHTML = '';
 		if (!browser) return;
+
 
 		new GGBApplet({
 			width: 500,
 			height: 500,
-			appletOnLoad(api) {
+			async appletOnLoad(api) {
+				if(!debug) api.setErrorDialogsActive(false);
 				api.setGridVisible(true);
 				for (let expression of expressions) {
-					api.evalCommand(expression.value);
+					if(debug) console.log(expression)
+					let labels = api.evalCommandGetLabels(expression.value);
+					if(labels){
+						try { api.renameObject(labels[0], expression.label); } catch {}
+						let splitLabels = labels.split(',');
+						if (expression.color) {
+							for (let label of splitLabels) {
+								api.setColor(label, expression.color.red, expression.color.green, expression.color.blue);
+							}
+						}
+					}else{
+						if(!debug) failed = true;
+					}
 				}
 				fileBase64 = api.getBase64();
 			}
@@ -57,6 +74,10 @@
 </script>
 
 <div>
-	<div bind:this={d} />
-	<button class="btn btn-primary m-2" on:click={download}>{$t('chat.downloadGeogebra')}</button>
+	{#if failed}
+		<div class="alert alert-danger">{$t('chat.geogebraFailed')}</div>
+	{:else}
+		<div bind:this={d} />
+		<button class="btn btn-primary m-2" on:click={download}>{$t('chat.downloadGeogebra')}</button>
+	{/if}
 </div>
