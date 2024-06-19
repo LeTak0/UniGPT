@@ -59,7 +59,7 @@
 			{#if data.chats}
 				{#each data.chats as chat}
 					<button
-						class="btn btn-secondary-subtle border chat-title text-nowrap text-truncate"
+						class="btn btn-secondary-subtle border chat-title text-nowrap text-truncate text-start"
 						on:click={() => switchChat(chat.name)}>{chat.name}</button
 					>
 					<button
@@ -79,7 +79,7 @@
 
 <style>
 	.chat-title {
-		max-width: 15ch;
+		max-width: 45ch;
 	}
 
 	.chats {
@@ -91,6 +91,6 @@
 
 	.layout {
 		display: grid;
-		grid-template-columns: minmax(10dvw, min-content) 1fr;
+		grid-template-columns: minmax(15dvw, min-content) 1fr;
 	}
 </style>
