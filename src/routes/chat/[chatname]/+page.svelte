@@ -60,11 +60,12 @@
 					pump();
 
 					function pump() {
-						reader.read().then(({ done, value }) => {
+
+						reader.read().then(async ({ done, value }) => {
 							if (done) {
 								controller.close();
-								invalidateAll();
-								typesetPage();
+								await invalidateAll();
+								await typesetPage();
 								scrollDown();
 								return;
 							}

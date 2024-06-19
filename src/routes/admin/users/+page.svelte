@@ -89,7 +89,7 @@
 						<td
 							><input
 								type="button"
-								class="btn btn-light border-secondary"
+								class="btn btn-dark border-secondary"
 								value={$t('common.edit')}
 								on:click={() => (username = user.username)}
 							/></td

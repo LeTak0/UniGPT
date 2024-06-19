@@ -12,3 +12,4 @@
 		{$t("common.welcomeButton")}
 	</a>
 </div>
+

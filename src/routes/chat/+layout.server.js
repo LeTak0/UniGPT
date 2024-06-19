@@ -7,9 +7,10 @@ import { redirect } from '@sveltejs/kit';
 export async function load({ locals , depends}) {
 	if (!await validateRole(locals, 'user')) redirect(307, '/login');
 
+	depends("app:user:chats")
+	
 	let chats = await getChats(locals.session.username);
 
-	depends("app:user:chats")
 
 	return {
 		chats:chats

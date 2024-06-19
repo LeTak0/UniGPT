@@ -1,3 +1,7 @@
+@include color-mode(dark) {
+	// CSS variable overrides here...
+}
+
 :root {
 	--bs-border-radius: 1rem;
 }

@@ -43,25 +43,29 @@
 	}
 </script>
 
-<div class="p-4 bg-light rounded border">
+<div class="p-4 bg-body rounded border">
 	<h1 class="mb-4">{$t('common.register')}</h1>
-	<form on:submit|preventDefault={register}>
-		<div class="mb-3">
-			<label for="username form-label">{$t('common.username')}:</label>
-			<input id="username form-control" type="text" bind:value={username} required />
-		</div>
-		<div class="mb-3">
-			<label for="password form-label">{$t('common.password')}:</label>
-			<input id="password form-control" type="password" bind:value={password} required />
-		</div>
+	<form class="grid" on:submit|preventDefault={register}>
+		<label for="username" class="form-label">{$t('common.username')}:</label>
+		<input id="username" class="form-control" type="text" bind:value={username} required />
+
+		<label for="password"class="form-label">{$t('common.password')}:</label>
+		<input id="password" class="form-control" type="password" bind:value={password} required />
 
 		<input class="btn btn-primary" type="submit" value={$t('common.register')} />
 		{#if error != null}
-			<div class="alert alert-danger mt-4" role="alert">
+			<div class="alert alert-danger mt-2 py-2" role="alert">
 				{$t(error)}
 			</div>
 		{/if}
 	</form>
 </div>
 
+<style>
+	.grid {
+		display: grid;
+		grid-template-columns: min-content 1fr;
+		grid-gap: 1rem;
+	}
+</style>
 

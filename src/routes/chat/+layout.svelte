@@ -5,7 +5,7 @@
 	import { t } from '$lib/translations';
 
 	import { enhance } from '$app/forms';
-	import { goto, invalidate } from '$app/navigation';
+	import { goto, invalidate, invalidateAll } from '$app/navigation';
 	import { base } from '$app/paths';
 	import DeleteConfirm from '$lib/DeleteConfirm.svelte';
 
@@ -33,8 +33,8 @@
 			},
 			body: JSON.stringify({ chat: deleteChatName })
 		}).then(async (res) => {
-			await invalidate("app:user:chats");
-			goto(`${base}/chat`);
+			await invalidateAll();
+			await goto(`${base}/chat`);
 		});
 	}
 </script>
@@ -43,10 +43,10 @@
 	<script src="https://www.geogebra.org/apps/deployggb.js"></script>
 </svelte:head>
 
-<div class="layout w-100 h-100 bg-light">
+<div class="layout w-100 h-100 bg-body-tertiary">
 	<DeleteConfirm showModal={deleteConfirmOpen} on:delete={deleteConfirm} />
-	<div class="d-flex flex-column bg-body w-100 h-100 overflow-hidden">
-		<a class="nav-link link-secondary fw-bold mt-2 text-center" href="/chat">{$t('chat.yourChats')}</a>
+	<div class="d-flex flex-column bg-body rounded-end-4 border-top border-end border-right w-100 h-100 overflow-hidden">
+		<a class="nav-link link-secondary-subtle fw-bold mt-2 text-center" href="/chat">{$t('chat.yourChats')}</a>
 		<form
 			class="w-100 d-flex justify-content-center"
 			method="POST"
@@ -59,7 +59,7 @@
 			{#if data.chats}
 				{#each data.chats as chat}
 					<button
-						class="btn btn-light border btn chat-title text-nowrap text-truncate"
+						class="btn btn-secondary-subtle border chat-title text-nowrap text-truncate"
 						on:click={() => switchChat(chat.name)}>{chat.name}</button
 					>
 					<button

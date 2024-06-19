@@ -77,7 +77,7 @@
 	{#if failed}
 		<div class="alert alert-danger">{$t('chat.geogebraFailed')}</div>
 	{:else}
-		<div bind:this={d} />
+		<div class="rounded overflow-hidden" bind:this={d} />
 		<button class="btn btn-primary m-2" on:click={download}>{$t('chat.downloadGeogebra')}</button>
 	{/if}
 </div>

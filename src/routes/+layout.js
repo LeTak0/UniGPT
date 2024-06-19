@@ -1,7 +1,11 @@
 import { loadTranslations } from '$lib/translations';
 
+export const ssr = false;
+
 /** @type {import('@sveltejs/kit').Load} */
-export const load = async ({ url, data }) => {
+export const load = async ({ url, data, depends }) => {
+	depends('app:session');
+
 	const { pathname } = url;
 
 	const initLocale = navigator.language.split('-')[0];

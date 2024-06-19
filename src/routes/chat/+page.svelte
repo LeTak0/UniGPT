@@ -24,7 +24,7 @@
 			<h3>{$t('chat.previousConversation')}</h3>
 		</div>
 		{#each displayedChats as chat}
-			<div class="p-4 border rounded bg-secondary-subtle">
+			<div class="p-4 border rounded bg-body-secondary">
 				<h5>{chat.name}</h5>
 				<br />	
 				<a class="link-primary link-offset-2" href="{base}/chat/{chat.name}">
